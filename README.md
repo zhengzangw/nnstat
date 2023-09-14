@@ -47,6 +47,12 @@ W0.describe_layers(include="ln") # get a bunch of statistics of W0 for each laye
 nnstat.compute_stats(model, optimizer, ["exp_avg", "exp_avg_sg"]) # describe weight, grad, optimizer state together
 ```
 
+To log the statistics of neural network, you can log the statistics to Tensorboard, Wandb, etc.
+
+```python
+wandb.log(W0.describe_layers(display=False), step=step)
+```
+
 ## Advanced
 
 The documentation of nnstat is still under construction. You can check the source code for more details.
