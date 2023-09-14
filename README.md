@@ -55,13 +55,13 @@ The documentation of nnstat is still under construction. You can check the sourc
 
 > Proposed in [Large Batch Training of Convolutional Networks](https://arxiv.org/abs/1708.03888).
 
-The trust ratio is defined as $\frac{\|W_{t}\|_2}{\|W_t - W_{t-1}\|_2}$. It can be used to analyze the layerwise update strength.
+The trust ratio is defined as $\frac{||W_{t}||\_2}{||W_t - W_{t-1}||_2}$. It can be used to analyze the layerwise update strength.
 
 ### noise scale
 
 > Proposed in [An Empirical Model of Large-Batch Training](https://arxiv.org/abs/1812.06162)
 
-The noise scale is defined as $\frac{\text{tr}(H\Sigma)}{G^THG}$. The direct computation of noise scale is expensive. The paper proposes to use two different batch sizes to estimate the noise scale. In addition to this method, we also provide a curve fitting method to estimate the noise scale. It can be used to analyze whether we need to scale learning rate with batch size.
+The noise scale is defined as $\frac{\text{tr}(H\Sigma)}{G^THG}$. The direct computation of noise scale is expensive. The paper proposes to use two different batch sizes to estimate the noise scale. In addition to this method, we also provide a curve-fitting method to estimate the noise scale. It can be used to analyze whether we need to scale the learning rate with batch size.
 
 | Model       | Dataset     | Noise Scale |
 | ----------- | ----------- | ----------- |
