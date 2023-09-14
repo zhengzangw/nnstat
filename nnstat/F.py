@@ -9,6 +9,34 @@ from tqdm import tqdm
 from .core import *
 
 
+def compute_stats(
+    model: nn.Module,
+    optimizer: torch.optim.Optimizer = None,
+    optimizer_keys=(),
+    display=True,
+):
+    weight = NetDict.get_weight(model)
+    grad = NetDict.get_grad(model)
+
+    # optimizer state
+    optimizer_state = []
+    for optimizer_key in optimizer_keys:
+        optimizer_state.append(
+            NetDict.get_optimizer_state(model, optimizer, optimizer_key)
+        )
+
+    if display:
+        print_title("Weight")
+        weight.describe()
+        print_title("Grad")
+        grad.describe()
+        for i, optimizer_key in enumerate(optimizer_keys):
+            print_title(f"Optimizer state {optimizer_key}")
+            optimizer_state[i].describe()
+
+    return dict(weight=weight, grad=grad, optimizer_state=optimizer_state)
+
+
 def compute_trust_ratio(
     w0: Union[NetDict, nn.Module],
     w1: Union[NetDict, nn.Module],
@@ -36,34 +64,6 @@ def compute_trust_ratio(
             tab.add_row([key, f"{value:.5g}"])
         print(tab)
     return trust_ratios
-
-
-def compute_stats(
-    model: nn.Module,
-    optimizer: torch.optim.Optimizer = None,
-    optimizer_keys=(),
-    display=True,
-):
-    weight = NetDict.get_weight(model)
-    grad = NetDict.get_grad(model)
-
-    # optimizer state
-    optimizer_state = []
-    for optimizer_key in optimizer_keys:
-        optimizer_state.append(
-            NetDict.get_optimizer_state(model, optimizer, optimizer_key)
-        )
-
-    if display:
-        print_title("Weight")
-        weight.describe()
-        print_title("Grad")
-        grad.describe()
-        for i, optimizer_key in enumerate(optimizer_keys):
-            print_title(f"Optimizer state {optimizer_key}")
-            optimizer_state[i].describe()
-
-    return dict(weight=weight, grad=grad, optimizer_state=optimizer_state)
 
 
 def compute_noise_scale(
