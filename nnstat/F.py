@@ -98,7 +98,6 @@ def compute_noise_scale(
             L2_norm_2 = (get_grad(model).norm(2) / cur_bs) ** 2
             L1_norms[i] += L1_norm
             L2_2_norms[i] += L2_norm_2
-    compute_stats(model)
     model.zero_grad()
     L1_norms /= num_average
     L2_2_norms /= num_average

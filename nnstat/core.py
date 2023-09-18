@@ -42,7 +42,6 @@ class NetDict(OrderedDict):
         super().__setitem__(key, value)
 
     def __str__(self):
-        # print class name
         s = f"{self.__class__.__name__}(\n"
         keys = list(self.keys())
         shapes = [str(tuple(value.shape)) for value in self.values()]
