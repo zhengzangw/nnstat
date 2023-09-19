@@ -7,8 +7,6 @@ A toolkit to track and analyze the status and statistics of neural network.
 
 ## Todo
 
-- [ ] Better describe logics
-- [ ] Better display for layerwise statistics.
 - [ ] Heatmap for layer parameters.
 - [ ] Histogram for layer parameters.
 

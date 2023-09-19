@@ -1,3 +1,5 @@
+import logging
+import os
 import pickle
 from collections import OrderedDict
 from pprint import pprint
@@ -6,6 +8,16 @@ from typing import Callable, Dict, List, Tuple, Union
 import matplotlib.pyplot as plt
 import torch
 from prettytable import PrettyTable
+
+logging.basicConfig()
+logger = logging.getLogger("nnstat")
+cache_dir = "nnstat_cache"
+
+
+def set_cache_dir(path):
+    global cache_dir
+    cache_dir = path
+    os.makedirs(cache_dir, exist_ok=True)
 
 
 def save_obj(obj, name, suffix="pickle"):
@@ -42,13 +54,30 @@ def print_table(table_dict):
 
 
 def plot_curve(x, y: dict, name="torchmonitor", x_label=None, y_label=None):
+    set_cache_dir(cache_dir)
     plt.clf()
     for key, value in y.items():
         plt.plot(x, value, label=key)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
-    plt.savefig(f"{name}.png")
-    print(f"[torchmonitor] saved {name}.png")
+    fig_path = os.path.join(cache_dir, f"{name}.png")
+    plt.savefig(fig_path)
+    logger.warning(f"saved {fig_path}")
+
+
+class ResultDict(OrderedDict):
+    def __init__(self, columns: List[str], exclude: Union[str, List[str]] = None):
+        super().__init__()
+        if exclude is not None:
+            if isinstance(exclude, str):
+                exclude = [exclude]
+            for e in exclude:
+                if e in columns:
+                    columns.remove(e)
+
+        self.columns = columns
+        for c in columns:
+            self[c] = []
 
 
 class NetDict(OrderedDict):
@@ -59,7 +88,7 @@ class NetDict(OrderedDict):
         super().__setitem__(key, value)
 
     def __str__(self):
-        s = f"{self.__class__.__name__}(\n"
+        s = f"{self.__class__.__name__}[L1={self.norm(1)}, L2={self.norm(2)}](\n"
         keys = list(self.keys())
         shapes = [str(tuple(value.shape)) for value in self.values()]
         max_key_len = max(len(key) for key in keys)
@@ -167,17 +196,7 @@ class NetDict(OrderedDict):
             "L2_squared",
         ]
 
-        # exclude columns
-        if exclude is not None:
-            if isinstance(exclude, str):
-                exclude = [exclude]
-            for e in exclude:
-                if e in columns:
-                    columns.remove(e)
-
-        ret = OrderedDict()
-        for c in columns:
-            ret[c] = []
+        ret = ResultDict(columns, exclude)
 
         if "num_params" in columns:
             ret["num_params"].append(self.num_params)
@@ -201,6 +220,7 @@ class NetDict(OrderedDict):
         display=True,
         pattern: Union[str, List[str]] = None,
         exclude: Union[str, List[str]] = None,
+        include=None,
     ):
         # default columns
         columns = [
@@ -214,17 +234,7 @@ class NetDict(OrderedDict):
             "max_abs",
         ]
 
-        # exclude columns
-        if exclude is not None:
-            if isinstance(exclude, str):
-                exclude = [exclude]
-            for e in exclude:
-                if e in columns:
-                    columns.remove(e)
-
-        ret = OrderedDict()
-        for c in columns:
-            ret[c] = []
+        ret = ResultDict(columns, exclude)
 
         for i, (key, value) in enumerate(self.items()):
             if pattern is not None and not any([inc in key for inc in pattern]):
@@ -246,6 +256,11 @@ class NetDict(OrderedDict):
                 ret["L2_squared"].append(value.norm(2).item() ** 2)
             if "max_abs" in columns:
                 ret["max_abs"].append(value.abs().max().item())
+
+        if include is not None:
+            for key, value in include.items():
+                if key not in columns:
+                    ret[key] = value
 
         if display:
             print_title("Layer-wise stats")
@@ -294,5 +309,5 @@ get_grad = NetDict.get_grad
 get_optimizer_state = NetDict.get_optimizer_state
 
 
-def get_update(w0: NetDict, w1: NetDict):
-    return w1 - w0
+def get_update(w0: NetDict, w1: NetDict, lr: float = 1.0):
+    return (w1 - w0) / lr
