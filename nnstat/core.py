@@ -24,6 +24,23 @@ def print_title(name: str, width: int = 50, symbol="="):
     print(f"{' ' + name + ' ':=^{width}}")
 
 
+def process_table_element(value):
+    if isinstance(value, float):
+        return f"{value:.5g}"
+    return value
+
+
+def print_table(table_dict):
+    tab = PrettyTable()
+    tab.align = "l"
+    tab.field_names = list(table_dict.keys())
+    length = len(list(table_dict.values())[0])
+    for i in range(length):
+        row = [process_table_element(value[i]) for value in table_dict.values()]
+        tab.add_row(row)
+    print(tab)
+
+
 def plot_curve(x, y: dict, name="torchmonitor", x_label=None, y_label=None):
     plt.clf()
     for key, value in y.items():
@@ -61,11 +78,18 @@ class NetDict(OrderedDict):
     def save(self, path):
         save_obj(self, path)
 
+    @classmethod
+    def load(cls, path):
+        return load_obj(path)
+
     def clone(self):
         new_dict = self.__class__()
         for key, value in self.items():
             new_dict[key] = value.clone()
         return new_dict
+
+    def is_compatible(self, other):
+        return self.keys() == other.keys()
 
     def __add__(self, other):
         assert self.is_compatible(other)
@@ -106,10 +130,6 @@ class NetDict(OrderedDict):
     def abs_(self):
         return self.apply_(lambda x: x.abs_())
 
-    @classmethod
-    def load(cls, path):
-        return load_obj(path)
-
     @property
     def num_params(self):
         return sum(v.numel() for v in self.values())
@@ -132,6 +152,106 @@ class NetDict(OrderedDict):
         # for values on cpu, it is not changable
         for key, value in self.items():
             self[key] = value.to(device)
+
+    def describe(
+        self,
+        display=True,
+        exclude: Union[str, List[str]] = None,
+    ):
+        # columns
+        columns = [
+            "num_params",
+            "L1_norm",
+            "L2_norm",
+            "L1_avg",
+            "L2_squared",
+        ]
+
+        # exclude columns
+        if exclude is not None:
+            if isinstance(exclude, str):
+                exclude = [exclude]
+            for e in exclude:
+                if e in columns:
+                    columns.remove(e)
+
+        ret = OrderedDict()
+        for c in columns:
+            ret[c] = []
+
+        if "num_params" in columns:
+            ret["num_params"].append(self.num_params)
+        if "L1_norm" in columns:
+            ret["L1_norm"].append(self.norm(1))
+        if "L2_norm" in columns:
+            ret["L2_norm"].append(self.norm(2))
+        if "L1_avg" in columns:
+            ret["L1_avg"].append(self.norm(1) / self.num_params)
+        if "L2_squared" in columns:
+            ret["L2_squared"].append(self.norm(2) ** 2)
+
+        if display:
+            print_title("Stats")
+            print_table(ret)
+        else:
+            return ret
+
+    def describe_layers(
+        self,
+        display=True,
+        pattern: Union[str, List[str]] = None,
+        exclude: Union[str, List[str]] = None,
+    ):
+        # default columns
+        columns = [
+            "id",
+            "layer_name",
+            "shape",
+            "L1_norm",
+            "L2_norm",
+            "L1_avg",
+            "L2_squared",
+            "max_abs",
+        ]
+
+        # exclude columns
+        if exclude is not None:
+            if isinstance(exclude, str):
+                exclude = [exclude]
+            for e in exclude:
+                if e in columns:
+                    columns.remove(e)
+
+        ret = OrderedDict()
+        for c in columns:
+            ret[c] = []
+
+        for i, (key, value) in enumerate(self.items()):
+            if pattern is not None and not any([inc in key for inc in pattern]):
+                continue
+
+            if "id" in columns:
+                ret["id"].append(i)
+            if "layer_name" in columns:
+                ret["layer_name"].append(key)
+            if "shape" in columns:
+                ret["shape"].append(list(value.shape))
+            if "L1_norm" in columns:
+                ret["L1_norm"].append(value.norm(1).item())
+            if "L2_norm" in columns:
+                ret["L2_norm"].append(value.norm(2).item())
+            if "L1_avg" in columns:
+                ret["L1_avg"].append(value.norm(1).item() / value.numel())
+            if "L2_squared" in columns:
+                ret["L2_squared"].append(value.norm(2).item() ** 2)
+            if "max_abs" in columns:
+                ret["max_abs"].append(value.abs().max().item())
+
+        if display:
+            print_title("Layer-wise stats")
+            print_table(ret)
+        else:
+            return ret
 
     @classmethod
     def get_weight(cls, model, requires_grad=False, cpu=True):
@@ -167,72 +287,6 @@ class NetDict(OrderedDict):
         if cpu:
             ret.to("cpu")
         return ret
-
-    def describe(self, display=True):
-        info = dict()
-        info["num params"] = self.num_params
-        info["L1 norm"] = self.norm(1)
-        info["L1 norm averaged"] = self.norm(1) / self.num_params
-        info["L2 norm"] = self.norm(2)
-        info["L2 norm squared"] = self.norm(2) ** 2
-
-        if display:
-            pprint(info, sort_dicts=False)
-
-        return info
-
-    def describe_layers(self, display=True, include: Union[str, List[str]] = None):
-        infos = [
-            "id",
-            "layer name",
-            "shape",
-            "L1 norm",
-            "L2 norm",
-            "L1 norm averaged",
-            "L2 norm squared",
-            "max abs value",
-        ]
-        ret = OrderedDict()
-        tab = PrettyTable()
-        tab.field_names = infos
-        tab.align = "l"
-
-        if isinstance(include, str):
-            include = [include]
-
-        for i, (key, value) in enumerate(self.items()):
-            if include is not None and not any([inc in key for inc in include]):
-                continue
-
-            L1_norm = value.norm(1).item()
-            L1_norm_averaged = L1_norm / value.numel()
-            L2_norm = value.norm(2).item()
-            L2_norm_squared = L2_norm**2
-            max_abs_value = value.abs().max().item()
-            shape = list(value.shape)
-            info_values = [
-                i,
-                key,
-                shape,
-                L1_norm,
-                L2_norm,
-                L1_norm_averaged,
-                L2_norm_squared,
-                max_abs_value,
-            ]
-            ret[key] = dict(zip(infos, info_values))
-
-            for i in range(3, len(info_values)):
-                info_values[i] = f"{info_values[i]:.5g}"
-            tab.add_row(info_values)
-
-        if display:
-            print(tab)
-
-        return ret
-
-    def is_compatible(self, other):
-        return self.keys() == other.keys()
 
 
 get_weight = NetDict.get_weight
