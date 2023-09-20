@@ -103,46 +103,60 @@ def exclude_from_columns(columns: List[str], exclude: Union[str, List[str]] = No
 
 
 stats_ops = dict(
+    # - norm
     num_params=lambda x: x.numel(),
-    # first-order origin moment
     L1_norm=lambda x: x.norm(1).item(),
-    # second-order central moment
-    L2_squared=lambda x: x.norm(2).item() ** 2,
     L2_norm=lambda x: x.norm(2).item(),
+    # L_+inf_norm
+    abs_min=lambda x: x.abs().min().item(),
+    # L_-inf_norm
+    abs_max=lambda x: x.abs().max().item(),
+    # - others
+    L2_squared=lambda x: x.norm(2).item() ** 2,
     max=lambda x: x.max().item(),
     min=lambda x: x.min().item(),
-    abs_mean=lambda x: x.norm(1).item() / x.numel(),
-    abs_max=lambda x: x.abs().max().item(),
 )
 layerwise_stats_ops = dict(
-    id=None,
-    layer_name=None,
-    shape=lambda x: list(x.shape),
-    # first-order central moment
+    # - moment
     mean=lambda x: x.mean().item(),
-    # second-order central moment
+    sq_mean=lambda x: x.pow(2).mean().item(),
     variance=lambda x: x.var().item(),
-    std=lambda x: x.std().item(),
-    # third-order central moment
     skew=lambda x: stats.skew(x, axis=None),
-    # fourth-order central moment
     kurtosis=lambda x: stats.kurtosis(x, axis=None),
+    # - mean
+    abs_mean=lambda x: x.norm(1).item() / x.numel(),
+    std=lambda x: x.std().item(),
+    sq_mean_std=lambda x: x.pow(2).mean().item() ** 0.5,
 )
 columns_group = dict(
-    stats=[
+    p1=[
         "num_params",
         "L1_norm",
         "L2_norm",
+        "abs_min",
+        "abs_max",
+        "max",
+        "min",
     ],
-    default=[
-        "layer_name",
-        "shape",
-        "L1_norm",
-        "L2_squared",
+    p2=[
         "mean",
+        "sq_mean",
         "variance",
         "skew",
         "kurtosis",
+    ],
+    p3=[
+        "abs_mean",
+        "std",
+        "L2_squared",
+        "sq_mean_std",
+    ],
+    default=[
+        "L1_norm",
+        "L2_norm",
+        "mean",
+        "variance",
+        "sq_mean",
     ],
 )
 
@@ -188,20 +202,40 @@ class NetDict(OrderedDict):
         return self.keys() == other.keys()
 
     def __add__(self, other):
-        assert self.is_compatible(other)
-        return self.__class__((key, value + other[key]) for key, value in self.items())
+        if isinstance(other, self.__class__):
+            assert self.is_compatible(other)
+            return self.__class__(
+                (key, value + other[key]) for key, value in self.items()
+            )
+        else:
+            return self.__class__((key, value + other) for key, value in self.items())
 
     def __mul__(self, other):
-        assert self.is_compatible(other)
-        return self.__class__((key, value * other[key]) for key, value in self.items())
+        if isinstance(other, self.__class__):
+            assert self.is_compatible(other)
+            return self.__class__(
+                (key, value * other[key]) for key, value in self.items()
+            )
+        else:
+            return self.__class__((key, value * other) for key, value in self.items())
 
     def __sub__(self, other):
-        assert self.is_compatible(other)
-        return self.__class__((key, value - other[key]) for key, value in self.items())
+        if isinstance(other, self.__class__):
+            assert self.is_compatible(other)
+            return self.__class__(
+                (key, value - other[key]) for key, value in self.items()
+            )
+        else:
+            return self.__class__((key, value - other) for key, value in self.items())
 
     def __truediv__(self, other):
-        assert self.is_compatible(other)
-        return self.__class__((key, value / other[key]) for key, value in self.items())
+        if isinstance(other, self.__class__):
+            assert self.is_compatible(other)
+            return self.__class__(
+                (key, value / other[key]) for key, value in self.items()
+            )
+        else:
+            return self.__class__((key, value / other) for key, value in self.items())
 
     def apply(self, func):
         return self.__class__((key, func(value)) for key, value in self.items())
@@ -253,7 +287,7 @@ class NetDict(OrderedDict):
         return stats_ops[op](self)
 
     def op_layerwise(self, op: str, pattern: Union[str, List[str]] = None):
-        assert op in layerwise_stats_ops or op in stats_ops
+        assert op in layerwise_stats_ops or op in stats_ops or op in ["id", "layer_name", "shape"]
 
         ret = []
         for i, (key, value) in enumerate(self.items()):
@@ -279,7 +313,7 @@ class NetDict(OrderedDict):
         exclude: Union[str, List[str]] = None,
         # valid only for layerwise
         pattern: Union[str, List[str]] = None,
-        include: pd.DataFrame=None,
+        include: pd.DataFrame = None,
     ):
         if isinstance(pattern, str):
             pattern = [pattern]
@@ -294,6 +328,8 @@ class NetDict(OrderedDict):
             if layerwise:
                 columns = list(layerwise_stats_ops.keys()) + columns
         columns = exclude_from_columns(columns, exclude)
+        if layerwise:
+            columns = ["layer_name", "shape"] + columns
         ret = pd.DataFrame(columns=columns)
 
         for k in ret.columns:

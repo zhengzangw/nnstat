@@ -7,8 +7,7 @@ A toolkit to track and analyze the status and statistics of neural network.
 
 ## Todo
 
-- [ ] Heatmap for layer parameters.
-- [ ] Histogram for layer parameters.
+- [ ] Hessian related computation
 
 ## Install
 
@@ -45,10 +44,12 @@ W0.describe_layers(layerwise=True, include="ln") # get a bunch of statistics of 
 nnstat.compute_stats(model, optimizer, ["exp_avg", "exp_avg_sg"]) # describe weight, grad, optimizer state together
 ```
 
+To plot the histogram and heatmap of each layer, you can use `hist` and `heatmap`.
+
 To log the statistics of neural network, you can log the statistics to Tensorboard, Wandb, etc.
 
 ```python
-wandb.log(W0.describe_layers(display=False), step=step)
+wandb.log(W0.describe(layerwise=True, display=False), step=step)
 ```
 
 ## Advanced
