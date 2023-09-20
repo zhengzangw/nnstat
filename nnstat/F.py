@@ -6,6 +6,7 @@ import torch
 import torch.nn as nn
 from scipy.optimize import curve_fit
 from tqdm import tqdm
+import pandas as pd
 
 from .core import *
 
@@ -52,20 +53,23 @@ def compute_trust_ratio(
         w1 = get_weight(w1)
     assert w0.is_compatible(w1)
 
-    columns = ["id", "layer_name", "trust_ratio"]
-    ret = ResultDict(columns)
+    columns = ["layer_name", "trust_ratio"]
+    ret = pd.DataFrame(columns=columns)
 
+    layer_name = []
+    trust_ratio = []
     for i, key in enumerate(w0.keys()):
         if pattern is not None and not any([inc in key for inc in pattern]):
             continue
-        ret["id"].append(i)
-        ret["layer_name"].append(key)
+        layer_name.append(key)
         tr = (lr * w0[key].norm(2) / (w0[key] - w1[key]).norm(2)).item()
-        ret["trust_ratio"].append(tr)
+        trust_ratio.append(tr)
+    ret["layer_name"] = layer_name
+    ret["trust_ratio"] = trust_ratio
 
     if display:
         print_title("Trust ratio")
-        print_table(ret)
+        print(ret)
     else:
         return ret
 
@@ -106,7 +110,8 @@ def compute_noise_scale(
     L1_norms /= num_average
     L2_2_norms /= num_average
 
-    ret = ResultDict(["method", "b_noise", "g_2", "trace_sigma"])
+    columns = ["method", "b_noise", "g_2", "trace_sigma"]
+    ret = []
 
     # by curve fitting
     def func(bs_inv, g_2, trace_sigma):
@@ -115,10 +120,9 @@ def compute_noise_scale(
     popt, pcov = curve_fit(func, 1 / bs, L2_2_norms)
     g_2, trace_sigma = popt
     b_noise = trace_sigma / g_2
-    ret["method"].append("curve_fit")
-    ret["b_noise"].append(b_noise)
-    ret["g_2"].append(g_2)
-    ret["trace_sigma"].append(trace_sigma)
+    ret.append(
+        dict(method="curve_fit", b_noise=b_noise, g_2=g_2, trace_sigma=trace_sigma)
+    )
 
     # by two point fitting
     b_small_index = (num_iters - 1) // 2
@@ -129,30 +133,25 @@ def compute_noise_scale(
     g_2 = (g_2_big * b_big - g_2_small * b_small) / (b_big - b_small)
     trace_sigma = (g_2_small - g_2_big) / (1 / b_small - 1 / b_big)
     b_noise = trace_sigma / g_2
-    ret["method"].append("two_point")
-    ret["b_noise"].append(b_noise)
-    ret["g_2"].append(g_2)
-    ret["trace_sigma"].append(trace_sigma)
+    ret.append(
+        dict(method="two_point", b_noise=b_noise, g_2=g_2, trace_sigma=trace_sigma)
+    )
+
+    ret = pd.DataFrame(ret, columns=columns)
 
     if save_plot:
-        plot_curve(
-            bs,
-            dict(data=L2_2_norms),
+        plot_line(
+            pd.DataFrame(dict(batch_size=bs, L2_2_norms=L2_2_norms)),
             name="L2_2_vs_bs",
-            x_label="batch size",
-            y_label="grad L2 norm squared",
         )
-        plot_curve(
-            1 / bs,
-            dict(data=L2_2_norms),
+        plot_line(
+            pd.DataFrame(dict(inv_batch_size=1 / bs, L2_2_norms=L2_2_norms)),
             name="L2_2_vs_inv_bs",
-            x_label="1 / batch size",
-            y_label="grad L2 norm squared",
         )
 
     # save and print
     if display:
         print_title("Noise scale")
-        print_table(ret)
+        print(ret)
     else:
         return ret

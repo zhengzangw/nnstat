@@ -2,11 +2,12 @@ import logging
 import os
 import pickle
 from collections import OrderedDict
-from pprint import pprint
-from typing import Callable, Dict, List, Tuple, Union
 from datetime import datetime
+from typing import Callable, Dict, List, Tuple, Union
 
 import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
 import torch
 from prettytable import PrettyTable
 from scipy import stats
@@ -42,25 +43,14 @@ def load_obj(name):
     return obj
 
 
-def print_title(name: str, width: int = 50, symbol="="):
-    print(f"{' ' + name + ' ':=^{width}}")
+def print_title(name: str):
+    print(f"[> {name} <]")
 
 
 def process_table_element(value):
     if isinstance(value, float):
         return f"{value:.5g}"
     return value
-
-
-def print_table(table_dict):
-    tab = PrettyTable()
-    tab.align = "l"
-    tab.field_names = list(table_dict.keys())
-    length = len(list(table_dict.values())[0])
-    for i in range(length):
-        row = [process_table_element(value[i]) for value in table_dict.values()]
-        tab.add_row(row)
-    print(tab)
 
 
 def save_fig(name, directory=None, suffix="png", log=True):
@@ -77,35 +67,39 @@ def save_fig(name, directory=None, suffix="png", log=True):
         logger.warning(f"saved {fig_path}")
 
 
-def plot_curve(x, y: dict, name="tmp", x_label=None, y_label=None, **kwargs):
-    for key, value in y.items():
-        plt.plot(x, value, label=key)
-    plt.xlabel(x_label)
-    plt.ylabel(y_label)
+def plot_line(df: pd.DataFrame, name="tmp", **kwargs):
+    x = df.columns[0]
+    y = df.columns[1]
+    sns.lineplot(data=df, x=x, y=y)
 
     save_fig(name, **kwargs)
 
 
-def plot_hist(x, bins=100, name="tmp", **kwargs):
-    plt.hist(x, bins=bins)
-    plt.title(name)
+def plot_hist(x, bins="auto", name="tmp", **kwargs):
+    sns.histplot(x, bins=bins)
+    plt.title(name + f" {list(x.shape)}")
 
     save_fig(name, **kwargs)
 
 
-class ResultDict(OrderedDict):
-    def __init__(self, columns: List[str], exclude: Union[str, List[str]] = None):
-        super().__init__()
-        if exclude is not None:
-            if isinstance(exclude, str):
-                exclude = [exclude]
-            for e in exclude:
-                if e in columns:
-                    columns.remove(e)
+def plot_heatmap(x, name="tmp", vmin=None, vmax=None, **kwargs):
+    assert x.dim() <= 2
+    if x.dim() == 1:
+        x = x.unsqueeze(0)
+    sns.heatmap(x, vmin=vmin, vmax=vmax)
+    plt.title(name + f" {list(x.shape)}")
 
-        self.columns = columns
-        for c in columns:
-            self[c] = []
+    save_fig(name, **kwargs)
+
+
+def exclude_from_columns(columns: List[str], exclude: Union[str, List[str]] = None):
+    if exclude is not None:
+        if isinstance(exclude, str):
+            exclude = [exclude]
+        for e in exclude:
+            if e in columns:
+                columns.remove(e)
+    return columns
 
 
 stats_ops = dict(
@@ -141,7 +135,6 @@ columns_group = dict(
         "L2_norm",
     ],
     default=[
-        "id",
         "layer_name",
         "shape",
         "L1_norm",
@@ -286,7 +279,7 @@ class NetDict(OrderedDict):
         exclude: Union[str, List[str]] = None,
         # valid only for layerwise
         pattern: Union[str, List[str]] = None,
-        include=None,
+        include: pd.DataFrame=None,
     ):
         if isinstance(pattern, str):
             pattern = [pattern]
@@ -300,7 +293,8 @@ class NetDict(OrderedDict):
             columns = list(stats_ops.keys())
             if layerwise:
                 columns = list(layerwise_stats_ops.keys()) + columns
-        ret = ResultDict(columns, exclude)
+        columns = exclude_from_columns(columns, exclude)
+        ret = pd.DataFrame(columns=columns)
 
         for k in ret.columns:
             if not layerwise:
@@ -309,13 +303,13 @@ class NetDict(OrderedDict):
                 ret[k] = self.op_layerwise(k, pattern)
 
         if include is not None and layerwise:
-            for key, value in include.items():
-                if key not in columns:
-                    ret[key] = value
+            if "layer_name" in include.columns:
+                include = include.drop(columns=["layer_name"])
+            ret = pd.concat([ret, include], axis=1)
 
         if display:
             print_title("Stats")
-            print_table(ret)
+            print(ret)
         else:
             return ret
 
@@ -364,12 +358,15 @@ class NetDict(OrderedDict):
     def heatmap(
         self,
         op: str = "identity",
+        vmin=None,
+        vmax=None,
         layerwise: bool = False,
         pattern: Union[str, List[str]] = None,
     ):
         assert layerwise
         assert op in ["identity", "abs", "square"]
 
+        directory = f"{op}_hist_{get_time()}"
         for key, value in self.items():
             if pattern is not None and not any([inc in key for inc in pattern]):
                 continue
@@ -377,6 +374,13 @@ class NetDict(OrderedDict):
                 value = value.abs()
             elif op == "square":
                 value = value**2
+            plot_heatmap(
+                value,
+                vmin=vmin,
+                vmax=vmax,
+                directory=directory,
+                name=key,
+            )
 
     @classmethod
     def get_weight(cls, model, requires_grad=False, cpu=True):
