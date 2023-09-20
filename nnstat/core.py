@@ -76,8 +76,10 @@ def plot_line(df: pd.DataFrame, name="tmp", **kwargs):
 
 
 def plot_hist(x, bins="auto", name="tmp", **kwargs):
-    sns.histplot(x, bins=bins)
-    plt.title(name + f" {list(x.shape)}")
+    shape = list(x.shape)
+    x = x.flatten()
+    sns.histplot(x, bins=bins, stat="percent")
+    plt.title(name + f" {shape}")
 
     save_fig(name, **kwargs)
 
@@ -260,6 +262,18 @@ class NetDict(OrderedDict):
     def abs_(self):
         return self.apply_(lambda x: x.abs_())
 
+    def sign(self):
+        return self.apply(lambda x: x.sign())
+
+    def sign_(self):
+        return self.apply_(lambda x: x.sign_())
+
+    def sqrt(self):
+        return self.apply(lambda x: x.sqrt())
+    
+    def sqrt_(self):
+        return self.apply_(lambda x: x.sqrt_())
+
     def numel(self):
         return sum(v.numel() for v in self.values())
 
@@ -385,10 +399,10 @@ class NetDict(OrderedDict):
                 elif op == "square":
                     value = value**2
                 plot_hist(
-                    value.flatten(),
+                    value,
                     bins=bins,
                     directory=directory,
-                    name=f"{key}{list(value.shape)}",
+                    name=f"{key}",
                 )
 
     def heatmap(
@@ -399,10 +413,12 @@ class NetDict(OrderedDict):
         layerwise: bool = False,
         pattern: Union[str, List[str]] = None,
     ):
+        if isinstance(pattern, str):
+            pattern = [pattern]
         assert layerwise
         assert op in ["identity", "abs", "square"]
 
-        directory = f"{op}_hist_{get_time()}"
+        directory = f"{op}_heatmap_{get_time()}"
         for key, value in self.items():
             if pattern is not None and not any([inc in key for inc in pattern]):
                 continue
@@ -447,8 +463,9 @@ class NetDict(OrderedDict):
         ret = cls(
             (name, optimizer.state[param][optimizer_key].cpu())
             for name, param in model.named_parameters()
-            if param.grad is not None
+            if param in optimizer.state
         )
+        assert len(ret) > 0
         if cpu:
             ret.to("cpu")
         return ret
@@ -461,3 +478,6 @@ get_optimizer_state = NetDict.get_optimizer_state
 
 def get_update(w0: NetDict, w1: NetDict, lr: float = 1.0):
     return (w1 - w0) / lr
+
+def get_adam_update(m: NetDict, v: NetDict, eps: float = 1e-6):
+    return m / (v.sqrt() + eps)
