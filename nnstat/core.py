@@ -8,6 +8,7 @@ from typing import Callable, Dict, List, Tuple, Union
 import matplotlib.pyplot as plt
 import torch
 from prettytable import PrettyTable
+from scipy import stats
 
 logging.basicConfig()
 logger = logging.getLogger("nnstat")
@@ -53,14 +54,14 @@ def print_table(table_dict):
     print(tab)
 
 
-def plot_curve(x, y: dict, name="torchmonitor", x_label=None, y_label=None):
+def plot_curve(x, y: dict, name="tmp.png", x_label=None, y_label=None):
     set_cache_dir(cache_dir)
     plt.clf()
     for key, value in y.items():
         plt.plot(x, value, label=key)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
-    fig_path = os.path.join(cache_dir, f"{name}.png")
+    fig_path = os.path.join(cache_dir, f"{name}")
     plt.savefig(fig_path)
     logger.warning(f"saved {fig_path}")
 
@@ -78,6 +79,47 @@ class ResultDict(OrderedDict):
         self.columns = columns
         for c in columns:
             self[c] = []
+
+
+stats_ops = dict(
+    num_params=lambda x: x.numel(),
+    # first-order origin moment
+    L1_norm=lambda x: x.norm(1).item(),
+    # second-order central moment
+    L2_squared=lambda x: x.norm(2).item() ** 2,
+    L2_norm=lambda x: x.norm(2).item(),
+    max=lambda x: x.max().item(),
+    min=lambda x: x.min().item(),
+    abs_mean=lambda x: x.norm(1).item() / x.numel(),
+    abs_max=lambda x: x.abs().max().item(),
+)
+layerwise_stats_ops = dict(
+    id=None,
+    layer_name=None,
+    shape=lambda x: list(x.shape),
+    # first-order central moment
+    mean=lambda x: x.mean().item(),
+    # second-order central moment
+    variance=lambda x: x.var().item(),
+    std=lambda x: x.std().item(),
+    # third-order central moment
+    skew=lambda x: stats.skew(x, axis=None),
+    # fourth-order central moment
+    kurtosis=lambda x: stats.kurtosis(x, axis=None),
+)
+columns_group = dict(
+    default=[
+        "id",
+        "layer_name",
+        "shape",
+        "L1_norm",
+        "L2_squared",
+        "mean",
+        "variance",
+        "skew",
+        "kurtosis",
+    ],
+)
 
 
 class NetDict(OrderedDict):
@@ -159,8 +201,7 @@ class NetDict(OrderedDict):
     def abs_(self):
         return self.apply_(lambda x: x.abs_())
 
-    @property
-    def num_params(self):
+    def numel(self):
         return sum(v.numel() for v in self.values())
 
     def norm(self, p=2):
@@ -168,13 +209,13 @@ class NetDict(OrderedDict):
         for v in self.values():
             norm += v.norm(p) ** p
         norm = norm ** (1 / p)
-        return norm.item()
+        return norm
 
-    def max_value(self):
-        return max(v.max() for v in self.values()).item()
+    def max(self):
+        return max(v.max() for v in self.values())
 
-    def min_value(self):
-        return min(v.min() for v in self.values()).item()
+    def min(self):
+        return min(v.min() for v in self.values())
 
     def to(self, device=None):
         # for values on cuda, it is changable but in place
@@ -182,32 +223,61 @@ class NetDict(OrderedDict):
         for key, value in self.items():
             self[key] = value.to(device)
 
+    def op(self, op: str):
+        assert op in stats_ops
+        return stats_ops[op](self)
+
+    def op_layerwise(self, op: str, pattern: Union[str, List[str]] = None):
+        assert op in layerwise_stats_ops or op in stats_ops
+
+        ret = []
+        for i, (key, value) in enumerate(self.items()):
+            if pattern is not None and not any([inc in key for inc in pattern]):
+                continue
+            if op in stats_ops:
+                ret.append(stats_ops[op](value))
+            elif op == "id":
+                ret.append(i)
+            elif op == "layer_name":
+                ret.append(key)
+            elif op == "shape":
+                ret.append(list(value.shape))
+            elif op in layerwise_stats_ops:
+                ret.append(layerwise_stats_ops[op](value))
+        return ret
+
     def describe(
         self,
-        display=True,
+        layerwise: bool = False,
+        display: bool = True,
+        group: str = "default",
         exclude: Union[str, List[str]] = None,
+        # valid only for layerwise
+        pattern: Union[str, List[str]] = None,
+        include=None,
     ):
-        # columns
-        columns = [
-            "num_params",
-            "L1_norm",
-            "L2_norm",
-            "L1_avg",
-            "L2_squared",
-        ]
+        if isinstance(pattern, str):
+            pattern = [pattern]
 
+        if group is not None:
+            assert group in columns_group
+            columns = columns_group[group]
+        else:
+            columns = list(stats_ops.keys())
+            if layerwise:
+                columns = list(layerwise_stats_ops.keys()) + columns
         ret = ResultDict(columns, exclude)
 
-        if "num_params" in columns:
-            ret["num_params"].append(self.num_params)
-        if "L1_norm" in columns:
-            ret["L1_norm"].append(self.norm(1))
-        if "L2_norm" in columns:
-            ret["L2_norm"].append(self.norm(2))
-        if "L1_avg" in columns:
-            ret["L1_avg"].append(self.norm(1) / self.num_params)
-        if "L2_squared" in columns:
-            ret["L2_squared"].append(self.norm(2) ** 2)
+        for k in ret.columns:
+            if not layerwise:
+                ret[k] = [self.op(k)]
+            else:
+                ret[k] = self.op_layerwise(k, pattern)
+
+        if include is not None and layerwise:
+            for key, value in include.items():
+                if key not in columns:
+                    ret[key] = value
 
         if display:
             print_title("Stats")
@@ -215,58 +285,30 @@ class NetDict(OrderedDict):
         else:
             return ret
 
-    def describe_layers(
-        self,
-        display=True,
-        pattern: Union[str, List[str]] = None,
-        exclude: Union[str, List[str]] = None,
-        include=None,
-    ):
-        # default columns
-        columns = [
-            "id",
-            "layer_name",
-            "shape",
-            "L1_norm",
-            "L2_norm",
-            "L1_avg",
-            "L2_squared",
-            "max_abs",
-        ]
-
-        ret = ResultDict(columns, exclude)
-
-        for i, (key, value) in enumerate(self.items()):
+    def hist(self, op: str = "identity", pattern: Union[str, List[str]] = None):
+        assert op in ["identity", "abs", "square"]
+        values = []
+        for key, value in self.items():
             if pattern is not None and not any([inc in key for inc in pattern]):
                 continue
+            values.append(value.flatten())
+        values = torch.cat(values)
+        if op == "abs":
+            values = values.abs()
+        elif op == "square":
+            values = values**2
 
-            if "id" in columns:
-                ret["id"].append(i)
-            if "layer_name" in columns:
-                ret["layer_name"].append(key)
-            if "shape" in columns:
-                ret["shape"].append(list(value.shape))
-            if "L1_norm" in columns:
-                ret["L1_norm"].append(value.norm(1).item())
-            if "L2_norm" in columns:
-                ret["L2_norm"].append(value.norm(2).item())
-            if "L1_avg" in columns:
-                ret["L1_avg"].append(value.norm(1).item() / value.numel())
-            if "L2_squared" in columns:
-                ret["L2_squared"].append(value.norm(2).item() ** 2)
-            if "max_abs" in columns:
-                ret["max_abs"].append(value.abs().max().item())
+        breakpoint()
+        plt.clf()
+        plt.hist(values.cpu().numpy(), bins=100)
+        fig_path = os.path.join(cache_dir, "hist_all.png")
+        plt.savefig(fig_path)
 
-        if include is not None:
-            for key, value in include.items():
-                if key not in columns:
-                    ret[key] = value
+    def hist_layerwise(self, pattern: Union[str, List[str]] = None):
+        pass
 
-        if display:
-            print_title("Layer-wise stats")
-            print_table(ret)
-        else:
-            return ret
+    def heatmap_layerwise(self, pattern: Union[str, List[str]] = None):
+        pass
 
     @classmethod
     def get_weight(cls, model, requires_grad=False, cpu=True):

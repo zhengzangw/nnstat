@@ -40,8 +40,8 @@ The `NetDict` class provides many useful methods to compute the statistics of ne
 ```python
 W0.norm(2) # get the l2 norm of W0
 W0.describe() # get a bunch of statistics of W0
-W0.describe_layers() # get a bunch of statistics of W0 for each layer
-W0.describe_layers(include="ln") # get a bunch of statistics of W0 for each layer whose name contains "ln"
+W0.describe(layerwise=True) # get a bunch of statistics of W0 for each layer
+W0.describe_layers(layerwise=True, include="ln") # get a bunch of statistics of W0 for each layer whose name contains "ln"
 nnstat.compute_stats(model, optimizer, ["exp_avg", "exp_avg_sg"]) # describe weight, grad, optimizer state together
 ```
 

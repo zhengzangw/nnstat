@@ -4,6 +4,7 @@ from typing import Callable, Dict, List, Tuple, Union
 import numpy as np
 import torch
 import torch.nn as nn
+from scipy.optimize import curve_fit
 from tqdm import tqdm
 
 from .core import *
@@ -108,8 +109,6 @@ def compute_noise_scale(
     ret = ResultDict(["method", "b_noise", "g_2", "trace_sigma"])
 
     # by curve fitting
-    from scipy.optimize import curve_fit
-
     def func(bs_inv, g_2, trace_sigma):
         return g_2 + bs_inv * trace_sigma
 
@@ -139,14 +138,14 @@ def compute_noise_scale(
         plot_curve(
             bs,
             dict(data=L2_2_norms),
-            name="L2_2_vs_bs",
+            name="L2_2_vs_bs.png",
             x_label="batch size",
             y_label="grad L2 norm squared",
         )
         plot_curve(
             1 / bs,
             dict(data=L2_2_norms),
-            name="L2_2_vs_inv_bs",
+            name="L2_2_vs_inv_bs.png",
             x_label="1 / batch size",
             y_label="grad L2 norm squared",
         )
