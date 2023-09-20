@@ -4,6 +4,7 @@ import pickle
 from collections import OrderedDict
 from pprint import pprint
 from typing import Callable, Dict, List, Tuple, Union
+from datetime import datetime
 
 import matplotlib.pyplot as plt
 import torch
@@ -12,13 +13,21 @@ from scipy import stats
 
 logging.basicConfig()
 logger = logging.getLogger("nnstat")
-cache_dir = "nnstat_cache"
+cache_dir = "cache_nnstat"
 
 
 def set_cache_dir(path):
     global cache_dir
     cache_dir = path
     os.makedirs(cache_dir, exist_ok=True)
+
+
+def make_dir(path):
+    os.makedirs(path, exist_ok=True)
+
+
+def get_time():
+    return datetime.today().strftime("%y%m%d%H%M%S")
 
 
 def save_obj(obj, name, suffix="pickle"):
@@ -54,16 +63,34 @@ def print_table(table_dict):
     print(tab)
 
 
-def plot_curve(x, y: dict, name="tmp.png", x_label=None, y_label=None):
-    set_cache_dir(cache_dir)
+def save_fig(name, directory=None, suffix="png", log=True):
+    if directory is None:
+        directory = cache_dir
+    else:
+        directory = os.path.join(cache_dir, directory)
+
+    make_dir(directory)
+    fig_path = os.path.join(directory, f"{name}.{suffix}")
+    plt.savefig(fig_path)
     plt.clf()
+    if log:
+        logger.warning(f"saved {fig_path}")
+
+
+def plot_curve(x, y: dict, name="tmp", x_label=None, y_label=None, **kwargs):
     for key, value in y.items():
         plt.plot(x, value, label=key)
     plt.xlabel(x_label)
     plt.ylabel(y_label)
-    fig_path = os.path.join(cache_dir, f"{name}")
-    plt.savefig(fig_path)
-    logger.warning(f"saved {fig_path}")
+
+    save_fig(name, **kwargs)
+
+
+def plot_hist(x, bins=100, name="tmp", **kwargs):
+    plt.hist(x, bins=bins)
+    plt.title(name)
+
+    save_fig(name, **kwargs)
 
 
 class ResultDict(OrderedDict):
@@ -108,6 +135,11 @@ layerwise_stats_ops = dict(
     kurtosis=lambda x: stats.kurtosis(x, axis=None),
 )
 columns_group = dict(
+    stats=[
+        "num_params",
+        "L1_norm",
+        "L2_norm",
+    ],
     default=[
         "id",
         "layer_name",
@@ -262,6 +294,8 @@ class NetDict(OrderedDict):
         if group is not None:
             assert group in columns_group
             columns = columns_group[group]
+            if not layerwise:
+                columns = [c for c in columns if c in stats_ops]
         else:
             columns = list(stats_ops.keys())
             if layerwise:
@@ -285,30 +319,64 @@ class NetDict(OrderedDict):
         else:
             return ret
 
-    def hist(self, op: str = "identity", pattern: Union[str, List[str]] = None):
+    def hist(
+        self,
+        op: str = "identity",
+        bins: int = 100,
+        layerwise: bool = False,
+        pattern: Union[str, List[str]] = None,
+    ):
+        if isinstance(pattern, str):
+            pattern = [pattern]
         assert op in ["identity", "abs", "square"]
-        values = []
+
+        if not layerwise:
+            logger.warning("Histogram of all parameters comsumes a lot of time.")
+            values = []
+            for key, value in self.items():
+                if pattern is not None and not any([inc in key for inc in pattern]):
+                    continue
+                values.append(value.flatten())
+            values = torch.cat(values)
+
+            if op == "abs":
+                values = values.abs()
+            elif op == "square":
+                values = values**2
+
+            plot_hist(values, bins=bins, name=f"{op}_all_hist")
+        else:
+            directory = f"{op}_hist_{get_time()}"
+            for key, value in self.items():
+                if pattern is not None and not any([inc in key for inc in pattern]):
+                    continue
+                if op == "abs":
+                    value = value.abs()
+                elif op == "square":
+                    value = value**2
+                plot_hist(
+                    value.flatten(),
+                    bins=bins,
+                    directory=directory,
+                    name=f"{key}{list(value.shape)}",
+                )
+
+    def heatmap(
+        self,
+        op: str = "identity",
+        layerwise: bool = False,
+        pattern: Union[str, List[str]] = None,
+    ):
+        assert layerwise
+        assert op in ["identity", "abs", "square"]
+
         for key, value in self.items():
             if pattern is not None and not any([inc in key for inc in pattern]):
                 continue
-            values.append(value.flatten())
-        values = torch.cat(values)
-        if op == "abs":
-            values = values.abs()
-        elif op == "square":
-            values = values**2
-
-        breakpoint()
-        plt.clf()
-        plt.hist(values.cpu().numpy(), bins=100)
-        fig_path = os.path.join(cache_dir, "hist_all.png")
-        plt.savefig(fig_path)
-
-    def hist_layerwise(self, pattern: Union[str, List[str]] = None):
-        pass
-
-    def heatmap_layerwise(self, pattern: Union[str, List[str]] = None):
-        pass
+            if op == "abs":
+                value = value.abs()
+            elif op == "square":
+                value = value**2
 
     @classmethod
     def get_weight(cls, model, requires_grad=False, cpu=True):

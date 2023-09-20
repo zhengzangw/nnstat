@@ -138,14 +138,14 @@ def compute_noise_scale(
         plot_curve(
             bs,
             dict(data=L2_2_norms),
-            name="L2_2_vs_bs.png",
+            name="L2_2_vs_bs",
             x_label="batch size",
             y_label="grad L2 norm squared",
         )
         plot_curve(
             1 / bs,
             dict(data=L2_2_norms),
-            name="L2_2_vs_inv_bs.png",
+            name="L2_2_vs_inv_bs",
             x_label="1 / batch size",
             y_label="grad L2 norm squared",
         )
