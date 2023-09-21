@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 import torch
+from matplotlib.colors import LogNorm
 from prettytable import PrettyTable
 from scipy import stats
 
@@ -53,6 +54,16 @@ def process_table_element(value):
     return value
 
 
+def op_str(s: str, value):
+    assert s in ["abs", "square", "identity"]
+    if s == "abs":
+        return value.abs()
+    elif s == "square":
+        return value**2
+    else:
+        return value
+
+
 def save_fig(name, directory=None, suffix="png", log=True):
     if directory is None:
         directory = cache_dir
@@ -75,20 +86,32 @@ def plot_line(df: pd.DataFrame, name="tmp", **kwargs):
     save_fig(name, **kwargs)
 
 
-def plot_hist(x, bins="auto", name="tmp", **kwargs):
+def plot_hist(x, bins="auto", name="tmp", logx=False, logy=False, **kwargs):
     shape = list(x.shape)
     x = x.flatten()
-    sns.histplot(x, bins=bins, stat="percent")
+    sns.histplot(x, bins=bins, log_scale=(logx, logy))
     plt.title(name + f" {shape}")
 
     save_fig(name, **kwargs)
 
 
-def plot_heatmap(x, name="tmp", vmin=None, vmax=None, **kwargs):
+def plot_ecdf(x, name="tmp", logx=False, logy=False, **kwargs):
+    shape = list(x.shape)
+    x = x.flatten()
+    sns.ecdfplot(x, log_scale=(logx, logy))
+    plt.title(name + f" {shape}")
+
+    save_fig(name, **kwargs)
+
+
+def plot_heatmap(x, name="tmp", vmin=None, vmax=None, log=False, **kwargs):
     assert x.dim() <= 2
     if x.dim() == 1:
         x = x.unsqueeze(0)
-    sns.heatmap(x, vmin=vmin, vmax=vmax)
+    if log:
+        sns.heatmap(x, vmin=vmin, vmax=vmax, norm=LogNorm())
+    else:
+        sns.heatmap(x, vmin=vmin, vmax=vmax)
     plt.title(name + f" {list(x.shape)}")
 
     save_fig(name, **kwargs)
@@ -102,6 +125,14 @@ def exclude_from_columns(columns: List[str], exclude: Union[str, List[str]] = No
             if e in columns:
                 columns.remove(e)
     return columns
+
+
+def pattern_filter(keys, pattern):
+    if pattern is None:
+        return keys
+    if isinstance(pattern, str):
+        pattern = [pattern]
+    return [key for key in keys if any([inc in key for inc in pattern])]
 
 
 stats_ops = dict(
@@ -270,7 +301,7 @@ class NetDict(OrderedDict):
 
     def sqrt(self):
         return self.apply(lambda x: x.sqrt())
-    
+
     def sqrt_(self):
         return self.apply_(lambda x: x.sqrt_())
 
@@ -301,7 +332,11 @@ class NetDict(OrderedDict):
         return stats_ops[op](self)
 
     def op_layerwise(self, op: str, pattern: Union[str, List[str]] = None):
-        assert op in layerwise_stats_ops or op in stats_ops or op in ["id", "layer_name", "shape"]
+        assert (
+            op in layerwise_stats_ops
+            or op in stats_ops
+            or op in ["id", "layer_name", "shape"]
+        )
 
         ret = []
         for i, (key, value) in enumerate(self.items()):
@@ -321,7 +356,7 @@ class NetDict(OrderedDict):
 
     def describe(
         self,
-        layerwise: bool = False,
+        layerwise: bool = True,
         display: bool = True,
         group: str = "default",
         exclude: Union[str, List[str]] = None,
@@ -367,72 +402,86 @@ class NetDict(OrderedDict):
         self,
         op: str = "identity",
         bins: int = 100,
-        layerwise: bool = False,
+        logx: bool = False,
+        logy: bool = False,
+        layerwise: bool = True,
         pattern: Union[str, List[str]] = None,
     ):
-        if isinstance(pattern, str):
-            pattern = [pattern]
-        assert op in ["identity", "abs", "square"]
+        pattern_keys = pattern_filter(list(self.keys()), pattern)
 
         if not layerwise:
             logger.warning("Histogram of all parameters comsumes a lot of time.")
             values = []
             for key, value in self.items():
-                if pattern is not None and not any([inc in key for inc in pattern]):
-                    continue
-                values.append(value.flatten())
+                if key in pattern_keys:
+                    values.append(value.flatten())
             values = torch.cat(values)
-
-            if op == "abs":
-                values = values.abs()
-            elif op == "square":
-                values = values**2
-
+            values = op_str(op, values)
             plot_hist(values, bins=bins, name=f"{op}_all_hist")
         else:
             directory = f"{op}_hist_{get_time()}"
             for key, value in self.items():
-                if pattern is not None and not any([inc in key for inc in pattern]):
-                    continue
-                if op == "abs":
-                    value = value.abs()
-                elif op == "square":
-                    value = value**2
-                plot_hist(
+                if key in pattern_keys:
+                    value = op_str(op, value)
+                    plot_hist(
+                        value,
+                        bins=bins,
+                        logx=logx,
+                        logy=logy,
+                        directory=directory,
+                        name=f"{key}",
+                    )
+
+    def ecdf(
+        self,
+        op: str = "identity",
+        bins: int = 100,
+        logx: bool = False,
+        logy: bool = False,
+        layerwise: bool = True,
+        pattern: Union[str, List[str]] = None,
+    ):
+        if not layerwise:
+            raise NotImplementedError("heatmap of all parameters is not implemented")
+        pattern_keys = pattern_filter(list(self.keys()), pattern)
+
+        directory = f"{op}_ecdf_{get_time()}"
+        for key, value in self.items():
+            if key in pattern_keys:
+                value = op_str(op, value)
+                plot_ecdf(
                     value,
-                    bins=bins,
+                    logx=logx,
+                    logy=logy,
                     directory=directory,
-                    name=f"{key}",
+                    name=key,
                 )
 
     def heatmap(
         self,
         op: str = "identity",
-        vmin=None,
-        vmax=None,
-        layerwise: bool = False,
+        vmin: float = None,
+        vmax: float = None,
+        log: bool = False,
+        layerwise: bool = True,
         pattern: Union[str, List[str]] = None,
     ):
-        if isinstance(pattern, str):
-            pattern = [pattern]
-        assert layerwise
-        assert op in ["identity", "abs", "square"]
+        if not layerwise:
+            raise NotImplementedError("heatmap of all parameters is not implemented")
+        pattern_keys = pattern_filter(list(self.keys()), pattern)
 
         directory = f"{op}_heatmap_{get_time()}"
         for key, value in self.items():
-            if pattern is not None and not any([inc in key for inc in pattern]):
-                continue
-            if op == "abs":
-                value = value.abs()
-            elif op == "square":
-                value = value**2
-            plot_heatmap(
-                value,
-                vmin=vmin,
-                vmax=vmax,
-                directory=directory,
-                name=key,
-            )
+            if key in pattern_keys:
+                value = op_str(op, value)
+                plot_heatmap(
+                    value,
+                    vmin=vmin,
+                    vmax=vmax,
+                    log=log,
+                    directory=directory,
+                    name=key,
+                )
 
     @classmethod
     def get_weight(cls, model, requires_grad=False, cpu=True):
@@ -478,6 +527,7 @@ get_optimizer_state = NetDict.get_optimizer_state
 
 def get_update(w0: NetDict, w1: NetDict, lr: float = 1.0):
     return (w1 - w0) / lr
+
 
 def get_adam_update(m: NetDict, v: NetDict, eps: float = 1e-6):
     return m / (v.sqrt() + eps)
