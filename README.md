@@ -42,11 +42,17 @@ The `NetDict` class provides many useful methods to compute the statistics of ne
 W0.norm(2) # get the l2 norm of W0
 W0.describe(layerwise=False) # get a bunch of statistics of W0
 W0.describe() # get a bunch of statistics of W0 for each layer
-W0.describe(include="ln") # get a bunch of statistics of W0 for each layer whose name contains "ln"
+W0.describe(pattern="ln") # get a bunch of statistics of W0 for each layer whose name contains "ln"
 nnstat.compute_stats(model, optimizer, ["exp_avg", "exp_avg_sg"]) # describe weight, grad, optimizer state together
 ```
 
-To plot the histogram and heatmap of each layer, you can use `hist` and `heatmap`. The figures are saved to `cache_nnstat` directory by default.
+The `NetDict` class also provides many visualization methods to visualize each layer. Figures are saved to `cache_nnstat` directory by default.
+
+```python
+W0.hist() # plot the histogram of W0
+W0.ecdf(pattern="proj") # plot the ecdf of W0 for each layer whose name contains "proj"
+W0.heatmap(op="abs", pattern="ln", log=True) # plot the heatmap of W0 for each layer whose name contains "ln"
+```
 
 To log the statistics of neural network, you can log the statistics to Tensorboard, Wandb, etc.
 
@@ -69,9 +75,3 @@ The trust ratio is defined as $\frac{||W_{t}||\_2}{||W_t - W_{t-1}||_2}$. It can
 > Proposed in [An Empirical Model of Large-Batch Training](https://arxiv.org/abs/1812.06162)
 
 The noise scale is defined as $\frac{\text{tr}(H\Sigma)}{G^THG}$. The direct computation of noise scale is expensive. The paper proposes to use two different batch sizes to estimate the noise scale. In addition to this method, we also provide a curve-fitting method to estimate the noise scale. It can be used to analyze whether we need to scale the learning rate with batch size.
-
-| Model       | Dataset     | Noise Scale |
-| ----------- | ----------- | ----------- |
-| GPT-2 baby  | OpenWebText |             |
-| GPT-2 small | OpenWebText |             |
-| BERT base   |             |             |
