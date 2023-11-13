@@ -7,9 +7,29 @@ A toolkit to track and analyze the status and statistics of neural network.
 
 ## Todo
 
-- [ ] Hessian related computation
+- [ ] value-order plot
+- [ ] interpolation
+- Hessian related computation
+  - [ ] Hessian heatmap
+  - [ ] Hessian eigenvalue & eigenvector efficiently
+  - [ ] Conditioning number
+  - [ ] Gauss-Newton decomposition, Fisher information matrix, varaince of gradient, Hessian approximation
+  - [ ] CA-sharpness
+  - [ ] directional sharpness
+  - [ ] top eigen subspace percentage & overlap
+  - [ ] gradient variance
+- [ ] changes in norm and value
 - [ ] correlation
-- [ ] Init related computation
+- [ ] activation-related
+- [ ] update strength related
+- [ ] Initialization related
+- [ ] Frequency related
+
+梯度相关性；最大学习率与梯度方向（学习率分配问题，如何 Diverge）；激活值稀疏性与 Adam 关系
+
+## Optimizer TestBet
+
+- [nanoGPT](https://github.com/karpathy/nanoGPT): GPT-2
 
 ## Install
 
