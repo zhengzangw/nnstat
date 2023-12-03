@@ -1,70 +1,99 @@
 import logging
 import os
 import pickle
+import re
 from datetime import datetime
-from typing import Callable, Dict, List, Tuple, Union
+from typing import Dict, List, Union, Callable
 
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
+import torch
 from matplotlib.colors import LogNorm
 
 logging.basicConfig()
 logger = logging.getLogger("nnstat")
-cache_dir = "cache_nnstat"
+CACHE_DIR = "cache_nnstat"
 
 
-def set_cache_dir(path):
-    global cache_dir
-    cache_dir = path
-    os.makedirs(cache_dir, exist_ok=True)
+def set_cache_dir(path: str):
+    global CACHE_DIR
+    CACHE_DIR = path
+    os.makedirs(CACHE_DIR, exist_ok=True)
 
 
-def make_dir(path):
-    os.makedirs(path, exist_ok=True)
+def get_cache_dir():
+    return CACHE_DIR
 
 
 def get_time():
     return datetime.today().strftime("%y%m%d%H%M%S")
 
 
-def save_obj(obj, name, suffix="pickle"):
+def make_dir(path: str):
+    os.makedirs(path, exist_ok=True)
+
+
+def save_obj(obj, name: str, suffix: str = "pickle"):
     with open(f"{name}.{suffix}", "wb") as handle:
         pickle.dump(obj, handle, protocol=pickle.HIGHEST_PROTOCOL)
     print(f"saved {name}.{suffix}")
 
 
-def load_obj(name):
+def load_obj(name: str):
     with open(f"{name}.pickle", "rb") as handle:
         obj = pickle.load(handle)
     return obj
 
 
-def print_title(name: str):
-    print(f"[> {name} <]")
+def pattern_filter(data_dict: Dict, pattern: Union[str, List[str]]):
+    if pattern is None:
+        return data_dict
+    pattern = str2list(pattern)
+    patterns = [re.compile(p) for p in pattern]
+    return {k: v for k, v in data_dict.items() if any(p.match(k) for p in patterns)}
 
 
-def process_table_element(value):
-    if isinstance(value, float):
-        return f"{value:.5g}"
-    return value
+def math_reduction(math_func: Callable):
+    def func(self, *args, layerwise: bool = False, pattern: Union[str, List[str]] = None, **kwargs):
+        if layerwise:
+            return pattern_filter({k: math_func(self, v, *args, **kwargs) for k, v in self.items()}, pattern)
+        return math_func(self, self.flatten(), *args, **kwargs)
+
+    return func
 
 
-def op_str(s: str, value):
-    assert s in ["abs", "square", "identity"]
-    if s == "abs":
-        return value.abs()
-    elif s == "square":
-        return value**2
-    else:
-        return value
+# region: format
 
 
+def str2list(s: Union[str, List[str]]) -> List[str]:
+    if s is None:
+        return []
+    if isinstance(s, str):
+        return [s]
+    return s
+
+
+def itemize(t: Union[float, torch.Tensor]):
+    if isinstance(t, torch.Tensor) and t.numel() == 1:
+        return t.item()
+    if isinstance(t, list):
+        return [itemize(x) for x in t]
+    if isinstance(t, dict):
+        return {k: itemize(v) for k, v in t.items()}
+    return t
+
+
+def print_title(name: str, width: int = 0):
+    print(f"[{' '+name+' ':=^{width}}]")
+
+
+# endregion: format
+
+
+# region: plot
 def save_fig(name, directory=None, suffix="png", log=True):
-    if directory is None:
-        directory = cache_dir
-    else:
-        directory = os.path.join(cache_dir, directory)
+    directory = CACHE_DIR if directory is None else os.path.join(CACHE_DIR, directory)
 
     make_dir(directory)
     fig_path = os.path.join(directory, f"{name}.{suffix}")
@@ -113,19 +142,4 @@ def plot_heatmap(x, name="tmp", vmin=None, vmax=None, log=False, **kwargs):
     save_fig(name, **kwargs)
 
 
-def exclude_from_columns(columns: List[str], exclude: Union[str, List[str]] = None):
-    if exclude is not None:
-        if isinstance(exclude, str):
-            exclude = [exclude]
-        for e in exclude:
-            if e in columns:
-                columns.remove(e)
-    return columns
-
-
-def pattern_filter(keys, pattern):
-    if pattern is None:
-        return keys
-    if isinstance(pattern, str):
-        pattern = [pattern]
-    return [key for key in keys if any([inc in key for inc in pattern])]
+# endregion: plot

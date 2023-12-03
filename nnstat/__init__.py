@@ -1,2 +1,5 @@
+import importlib.metadata
+
 from .core import *
-from .F import compute_noise_scale, compute_stats, compute_trust_ratio
+
+__version__ = importlib.metadata.version(__name__)

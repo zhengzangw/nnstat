@@ -1,0 +1,6 @@
+docutils
+sphinx
+sphinxcontrib-jquery
+sphinxcontrib-katex
+sphinx-copybutton
+git+https://github.com/ain-soph/trojanzoo_sphinx_theme.git#egg=trojanzoo_sphinx_theme
