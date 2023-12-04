@@ -16,7 +16,7 @@ pkg_location = path.dirname(path.dirname(pkg_file))
 # -- General configuration ------------------------------------------------
 
 project = "NNstat"
-author = "zhengzangw"
+author = "NNstat"
 copyright = f"2023, {author}"
 
 github_user = author
@@ -96,6 +96,14 @@ autodoc_docstring_signature = True
 autodoc_inherit_docstrings = False
 autodoc_preserve_defaults = True
 autodoc_typehints = "none"
+
+autodoc_default_options = {
+    'members': True,
+    'member-order': 'bysource',
+    'special-members': '__init__',
+    'undoc-members': True,
+    'exclude-members': '__weakref__'
+}
 
 toc_object_entries = True
 toc_object_entries_show_parents = "hide"

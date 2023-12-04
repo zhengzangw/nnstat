@@ -54,14 +54,6 @@ def pattern_filter(data_dict: Dict, pattern: Union[str, List[str]]):
     return {k: v for k, v in data_dict.items() if any(p.match(k) for p in patterns)}
 
 
-def math_reduction(math_func: Callable):
-    def func(self, *args, layerwise: bool = False, pattern: Union[str, List[str]] = None, **kwargs):
-        if layerwise:
-            return pattern_filter({k: math_func(self, v, *args, **kwargs) for k, v in self.items()}, pattern)
-        return math_func(self, self.flatten(), *args, **kwargs)
-
-    return func
-
 
 # region: format
 

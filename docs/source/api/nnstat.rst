@@ -4,6 +4,4 @@ nnstat
 ========
 
 .. automodule:: nnstat.core
-   :members:
-   :undoc-members:
-   :member-order: bysource
+

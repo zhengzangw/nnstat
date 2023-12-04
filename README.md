@@ -42,30 +42,6 @@ pip install -e .
 
 ## Basic
 
-The basic usage of nnstat is to track the status and statistics of neural network. You can use `get_weight`, `get_grad` and `get_optimizer_state` to get a `NetDict` of the corresponding information.
-
-```python
-W0 = nnstat.get_weight(model)
-loss = model(X, Y)
-loss.backward()
-G = nnstat.get_grad(model)
-optimizer.step()
-model.zero_grad()
-Mom = nnstat.get_optimizer_state(model, optimizer, "exp_avg")
-W1 = nnstat.get_weight(model)
-update = W1 - W0
-```
-
-The `NetDict` class provides many useful methods to compute the statistics of neural network.
-
-```python
-W0.norm(2) # get the l2 norm of W0
-W0.describe(layerwise=False) # get a bunch of statistics of W0
-W0.describe() # get a bunch of statistics of W0 for each layer
-W0.describe(pattern="ln") # get a bunch of statistics of W0 for each layer whose name contains "ln"
-nnstat.compute_stats(model, optimizer, ["exp_avg", "exp_avg_sg"]) # describe weight, grad, optimizer state together
-```
-
 The `NetDict` class also provides many visualization methods to visualize each layer. Figures are saved to `cache_nnstat` directory by default.
 
 ```python
