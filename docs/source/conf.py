@@ -53,7 +53,7 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.linkcode",  # viewcode
     "sphinx.ext.napoleon",
-    "sphinxcontrib.katex",
+    # "sphinxcontrib.katex",
     "sphinxcontrib.jquery",
     "sphinx_copybutton",
     "myst_parser",
@@ -119,7 +119,7 @@ toc_object_entries_show_parents = "hide"
 autosectionlabel_prefix_document = True
 
 # katex options
-katex_prerender = True
+# katex_prerender = True
 
 # napoleon options
 napoleon_use_ivar = True

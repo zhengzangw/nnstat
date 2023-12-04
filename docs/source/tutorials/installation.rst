@@ -8,4 +8,4 @@ Download the source code and install it by pip.
 ```bash
 cd nnstat
 pip install -e .
-
+```

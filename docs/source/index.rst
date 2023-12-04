@@ -22,5 +22,8 @@ Currently, we have tested in the following frameworks:
    :maxdepth: 2
 
    nnstat <api/nnstat>
+   nnstat.functional <api/functional>
+   nnstat.accum <api/accum>
+   nnstat.optim <api/optim>
    nnstat.utils <api/utils>
 

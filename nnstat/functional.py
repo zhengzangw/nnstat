@@ -1,54 +1,39 @@
-# from pprint import pprint
-# from typing import Callable, Dict, List, Tuple, Union
-
-# import numpy as np
-# import torch
-# import torch.nn as nn
-# from scipy.optimize import curve_fit
-# from tqdm import tqdm
-# import pandas as pd
-
-# from .core import *
+from .core import StateDict
 
 
-# def compute_stats(
-#     model: nn.Module,
-#     optimizer: torch.optim.Optimizer = None,
-#     optimizer_keys=(),
-#     display=True,
-# ):
-#     """_summary_
+def compute_update(w0: StateDict, w1: StateDict, alpha: float = 1.0) -> StateDict:
+    """Compute the update of the optimizer by :math:`(w_1 - w_0)/\\alpha`.
 
-#     Args:
-#         model (nn.Module): _description_
-#         optimizer (torch.optim.Optimizer, optional): _description_. Defaults to None.
-#         optimizer_keys (tuple, optional): _description_. Defaults to ().
-#         display (bool, optional): _description_. Defaults to True.
+    Args:
+        w0 (StateDict): initial state dict
+        w1 (StateDict): final state dict
+        alpha (float, optional): step size. Defaults to 1.0.
 
-#     Returns:
-#         _type_: _description_
-#     """
-#     weight = NetDict.get_weight(model)
-#     grad = NetDict.get_grad(model)
+    Returns:
+        StateDict: update
+    """
+    assert w0.is_compatible(w1)
+    return (w1 - w0) / alpha
 
-#     # optimizer state
-#     optimizer_state = []
-#     for optimizer_key in optimizer_keys:
-#         optimizer_state.append(
-#             NetDict.get_optimizer_state(model, optimizer, optimizer_key)
-#         )
 
-#     if display:
-#         print_title("Weight")
-#         weight.describe()
-#         print_title("Grad")
-#         grad.describe()
-#         for i, optimizer_key in enumerate(optimizer_keys):
-#             print_title(f"Optimizer state {optimizer_key}")
-#             optimizer_state[i].describe()
-#     else:
-#         return dict(weight=weight, grad=grad, optimizer_state=optimizer_state)
+def compute_adam_update(m: StateDict, v: StateDict, eps: float = 1e-6):
+    """Compute the update of Adam by :math:`m / (\\sqrt{v} + \\epsilon)`.
 
+    Args:
+        m (StateDict): first moment
+        v (StateDict): second moment
+        eps (float, optional): epsilon. Defaults to 1e-6.
+
+    Returns:
+        StateDict: update
+    """
+    return m / (v.sqrt() + eps)
+
+
+def compute_trust_ratio():
+    """From `Large Batch Training of Convolutional Networks <https://arxiv.org/abs/1708.03888>`_
+    """
+    pass
 
 # def compute_trust_ratio(
 #     w0: Union[NetDict, nn.Module],

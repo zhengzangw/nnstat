@@ -31,8 +31,6 @@ __all__ = [
     "zeros_like",
     "ones_like",
     "load",
-    "compute_update",
-    "compute_adam_update",
     "filter_dict",
 ]
 
@@ -107,28 +105,24 @@ def filter_dict(
 
 class StateDict(OrderedDict):
     """
-    `StateDict` is the main class of nnstat. It is a wrap over dictionary of tensors, such as the returns from `model.state_dict()`. It provides many useful functions to analyze the state dict and support basic math operations.
+    ``StateDict`` is the main class of nnstat. It is a wrap over dictionary of tensors, such as the returns from ``model.state_dict()``. It provides many useful functions to analyze the state dict and support basic math operations. For example:
 
-    For example:
-
-    .. code-block:: python
-
-        > import nnstat
-        > from torchvision import models
-        > state = nnstat.from_state_dict(models.resnet18().state_dict())
-        # or recommended way
-        > state = nnstat.from_weight(models.resnet18())
-        > print(state)
-        StateDict[L1=2.407e+05, L2=132.6, Numel=11,699,132]
-        (
-            00: conv1.weight                (64, 3, 7, 7)
-            01: bn1.weight                  (64,)
-            02: bn1.bias                    (64,)
-            03: bn1.running_mean            (64,)
-            04: bn1.running_var             (64,)
-            05: bn1.num_batches_tracked     ()
-            (...truncated)
-        )
+    >>> import nnstat
+    >>> from torchvision import models
+    >>> state = nnstat.from_state_dict(models.resnet18().state_dict())
+    # or recommended way
+    >>> state = nnstat.from_weight(models.resnet18())
+    >>> print(state)
+    StateDict[L1=2.407e+05, L2=132.6, Numel=11,699,132]
+    (
+        00: conv1.weight                (64, 3, 7, 7)
+        01: bn1.weight                  (64,)
+        02: bn1.bias                    (64,)
+        03: bn1.running_mean            (64,)
+        04: bn1.running_var             (64,)
+        05: bn1.num_batches_tracked     ()
+        (...truncated)
+    )
 
     The math functions can be categorized into two types. The first type applys element-wise operations to each tensor in the state dict. For example, to calculate adam update for analysis, we can do
 
@@ -139,44 +133,38 @@ class StateDict(OrderedDict):
         update = m / (v.sqrt() + 1e-8)
 
 
-    The second type applys reduction operations to the flattened state dict. These methods have a `layerwise` argument, which can be set to True to return a dict of results per layer. For example, to calculate the L1 norm of the state dict, we can do
+    The second type applys reduction operations to the flattened state dict. These methods have a ``layerwise`` argument, which can be set to True to return a dict of results per layer. For example, to calculate the L1 norm of the state dict, we can do
 
-    .. code-block:: python
+    >>> state.norm1(p=2)
+    tensor(113.1479)
+    >>> state.norm1(p=2, layerwise=True)
+    {'conv1.weight': tensor(2.4467), 'bn1.weight': tensor(8.), 'bn1.bias': tensor(0.), 'layer1.0.conv1.weight': tensor(11.2160), (...truncated)}
+    # use regex to filter keys
+    >>> state.norm1(p=2, layerwise=True, pattern=".*conv.*")
+    {'conv1.weight': tensor(2.4467), 'layer1.0.conv1.weight': tensor(11.2160), 'layer1.0.conv2.weight': tensor(11.3411), (...truncate)}
 
-        > state.norm1(p=2)
-        tensor(113.1479)
-        > state.norm1(p=2, layerwise=True)
-        {'conv1.weight': tensor(2.4467), 'bn1.weight': tensor(8.), 'bn1.bias': tensor(0.), 'layer1.0.conv1.weight': tensor(11.2160), (...truncated)}
-        # use regex to filter keys
-        > state.norm1(p=2, layerwise=True, pattern=".*conv.*")
-        {'conv1.weight': tensor(2.4467), 'layer1.0.conv1.weight': tensor(11.2160), 'layer1.0.conv2.weight': tensor(11.3411), (...truncate)}
+    We provide three ways to effectively examine the state dict status. The first is to use ``describe`` method for debugging in terminal, which can display a summary of the state dict.
 
-    We provide three ways to effectively examine the state dict status. The first is to use `describe` method for debugging in terminal, which can display a summary of the state dict.
-
-    .. code-block:: bash
-
-        > state.describe()
-        [============================ Stats ResNet_weights ============================]
-        name            shape         numel     norm1         norm1_mean  norm2
-        0  ResNet_weights  (11689512,)  11689512  235774.53125  0.02017     113.108963
-        > state.describe(layerwise=True, pattern=".*conv.*")
-        [=========================== Stats ResNet_weights ===========================]
-            name                   shape              numel    norm1        norm2
-        0   conv1.weight              (64, 3, 7, 7)     9408    188.525146   2.438898
-        1   layer1.0.conv1.weight    (64, 64, 3, 3)    36864   1736.147461  11.318304
-        2   layer1.0.conv2.weight    (64, 64, 3, 3)    36864   1736.389282  11.336217
-        3   layer1.1.conv1.weight    (64, 64, 3, 3)    36864   1733.171997  11.316651
-        4   layer1.1.conv2.weight    (64, 64, 3, 3)    36864   1724.930786  11.236347
-        (...truncated)
+    >>> state.describe()
+    [============================ Stats ResNet_weights ============================]
+    name            shape         numel     norm1         norm1_mean  norm2
+    0  ResNet_weights  (11689512,)  11689512  235774.53125  0.02017     113.108963
+    >>> state.describe(layerwise=True, pattern=".*conv.*")
+    [=========================== Stats ResNet_weights ===========================]
+        name                   shape              numel    norm1        norm2
+    0   conv1.weight              (64, 3, 7, 7)     9408    188.525146   2.438898
+    1   layer1.0.conv1.weight    (64, 64, 3, 3)    36864   1736.147461  11.318304
+    2   layer1.0.conv2.weight    (64, 64, 3, 3)    36864   1736.389282  11.336217
+    3   layer1.1.conv1.weight    (64, 64, 3, 3)    36864   1733.171997  11.316651
+    4   layer1.1.conv2.weight    (64, 64, 3, 3)    36864   1724.930786  11.236347
+    (...truncated)
 
     The second way is to export the statistics for tools such as tensorboard and wandb. To export the statistics, do the following:
 
-    .. code-block:: bash
+    >>> state.describe(display=False, include_keys=['norm1', 'norm2'])
+    {'norm1': 235752.828125, 'norm2': 113.10881805419922}
 
-        > state.describe(display=False, include_keys=['norm1', 'norm2'])
-        {'norm1': 235752.828125, 'norm2': 113.10881805419922}
-
-    The third way is to visualize the statistics by plotting. The plotting API automatically plot and save the figures to `_nnstat_cache` folder.
+    The third way is to visualize the statistics by plotting. The plotting API automatically plot and save the figures to :file:`_nnstat_cache` folder.
 
     .. code-block:: python
 
@@ -201,7 +189,7 @@ class StateDict(OrderedDict):
         copy: bool = True,
         **kwargs,
     ):
-        """`StateDict` is a subclass of OrderedDict. We recommend create StateDict using the factory functions such as `from_state_dict`, `from_weight`, `from_grad`, `from_optimizer_state`.
+        """``StateDict`` is a subclass of OrderedDict. We recommend create StateDict using the factory functions such as ``from_state_dict``, ``from_weight``, ``from_grad``, ``from_optimizer_state``.
 
         Args:
             name (str, optional): The name of the state dict. Defaults to None.
@@ -291,7 +279,7 @@ class StateDict(OrderedDict):
         return StateDict({key: self[key].clone() for key in self}, device=self.device, dtype=self.dtype, copy=True)
 
     def state_dict(self) -> dict[str, torch.Tensor]:
-        """Return a state dict of type dict, which can be loaded by `torch.load`.
+        """Return a state dict of type dict, which can be loaded by ``torch.load``.
 
         Returns:
             dict[str, torch.Tensor]: state dict
@@ -739,15 +727,15 @@ class StateDict(OrderedDict):
         exlude_keys: Union[str, List[str]] = None,
         additional_info: Dict[str, torch.Tensor] = None,
     ) -> Union[None, Dict[str, Dict[str, float]]]:
-        """Display a summary of the state dict. The pre-defined groups are `all` and `default`.
-        `all`: ["name", "shape", "numel", "norm1", "norm1_mean", "norm2", "sum", "mean", "var", "std", "skew", "kurtosis", "max", "min", "abs_min", "abs_max"],
-        `default`: ["name", "shape", "numel", "norm1", "norm1_mean", "norm2"]
+        """Display a summary of the state dict. The pre-defined groups are ``all`` and ``default``.
+        ``all``: ["name", "shape", "numel", "norm1", "norm1_mean", "norm2", "sum", "mean", "var", "std", "skew", "kurtosis", "max", "min", "abs_min", "abs_max"],
+        ``default``: ["name", "shape", "numel", "norm1", "norm1_mean", "norm2"]
 
         Args:
             display (bool, optional): If True, display the summary and return None. Defaults to True.
             layerwise (bool, optional): If True, display layerwise stats. Defaults to False.
             pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
-            group (str, optional): Group of keys. Defaults to None. If None and no include_keys are provided,  use the `default` group.
+            group (str, optional): Group of keys. Defaults to None. If None and no include_keys are provided,  use the ``default`` group.
             include_keys (Union[str, List[str]], optional): Additional keys to include. Defaults to None.
             exlude_keys (Union[str, List[str]], optional): Keys to exclude. Defaults to None.
             additional_info (Dict[str, torch.Tensor], optional): additional info to display. It should be like {"norm1": {"layer1": value1, "layer2": value2}, "norm2": {...}} Defaults to None.
@@ -1031,6 +1019,34 @@ def from_optimizer_state(
     return state
 
 
+def from_together(
+    model: nn.Module,
+    optimizer: torch.optim.Optimizer,
+    optimizer_keys: List[str] = None,
+    device: str = "cpu",
+    dtype: torch.dtype = torch.float32,
+    copy: bool = True,
+) -> tuple:
+    """Create weight, grad, optim status state dicts from a model and an optimizer.
+
+    Args:
+        model (nn.Module): model
+        optimizer (torch.optim.Optimizer): optimizer
+        optimizer_keys (List[str], optional): keys of optimizer state. Defaults to None. For adam, ["exp_avg", "exp_avg_sq"] can be used.
+
+    Returns:
+        tuple: weight state, grad state, optimizer states
+    """
+    weight_state = from_weight(model, device=device, dtype=dtype, copy=copy)
+    grad_state = from_grad(model, device=device, dtype=dtype, copy=copy)
+    optimizer_states = []
+    for key in optimizer_keys:
+        optimizer_states.append(
+            from_optimizer_state(model, optimizer, optimizer_key=key, device=device, dtype=dtype, copy=copy)
+        )
+    return weight_state, grad_state, *optimizer_states
+
+
 def zeros_like(state: StateDict, name: str = None) -> StateDict:
     """Create a StateDict with the same keys as the input state dict, but filled with zeros.
 
@@ -1097,32 +1113,3 @@ def load(
 
 
 # endregion: factory
-
-
-def compute_update(w0: StateDict, w1: StateDict, alpha: float = 1.0) -> StateDict:
-    """Compute the update of w0 to w1.
-
-    Args:
-        w0 (StateDict): initial state dict
-        w1 (StateDict): final state dict
-        alpha (float, optional): step size. Defaults to 1.0.
-
-    Returns:
-        StateDict: update
-    """
-    assert w0.is_compatible(w1)
-    return (w1 - w0) / alpha
-
-
-def compute_adam_update(m: StateDict, v: StateDict, eps: float = 1e-6):
-    """Compute the update of Adam.
-
-    Args:
-        m (StateDict): first moment
-        v (StateDict): second moment
-        eps (float, optional): epsilon. Defaults to 1e-6.
-
-    Returns:
-        StateDict: update
-    """
-    return m / (v.sqrt() + eps)
