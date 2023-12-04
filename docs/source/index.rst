@@ -22,4 +22,5 @@ Currently, we have tested in the following frameworks:
    :maxdepth: 2
 
    nnstat <api/nnstat>
+   nnstat.utils <api/utils>
 

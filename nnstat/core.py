@@ -3,6 +3,7 @@ Core functions and classes of NNstat.
 """
 
 import logging
+import re
 from collections import OrderedDict
 from typing import Callable, Dict, List, Union
 
@@ -11,7 +12,15 @@ import torch
 import torch.nn as nn
 from scipy import stats
 
-from .utils import itemize, pattern_filter, print_title, str2list
+from .utils import (
+    get_time,
+    itemize,
+    plot_ecdf,
+    plot_heatmap,
+    plot_hist,
+    print_title,
+    str2list,
+)
 
 __all__ = [
     "StateDict",
@@ -24,6 +33,7 @@ __all__ = [
     "load",
     "compute_update",
     "compute_adam_update",
+    "filter_dict",
 ]
 
 logging.basicConfig()
@@ -59,6 +69,40 @@ columns_group = dict(
         "norm2",
     ],
 )
+
+
+def filter_dict(
+    data_dict: Union[Dict, OrderedDict, "StateDict"],
+    pattern: Union[None, str, List[str]],
+    reverse: bool = False,
+) -> Dict:
+    """Filter a dict by regex pattern.
+
+    Args:
+        data_dict (Union[Dict, OrderedDict, StateDict]): dict
+        pattern (Union[None, str, List[str]]): regex pattern
+        reverse (bool, optional): If True, return the keys that do not match the pattern. Defaults to False.
+
+    Returns:
+        Dict: filtered dict
+    """
+    if pattern is None:
+        return data_dict
+    if isinstance(pattern, str):
+        pattern = [pattern]
+    patterns = [re.compile(p) for p in pattern]
+    data_type = type(data_dict)
+    if reverse:
+        keys_to_include = [k for k in data_dict.keys() if not any(p.match(k) for p in patterns)]
+    else:
+        keys_to_include = [k for k in data_dict.keys() if any(p.match(k) for p in patterns)]
+
+    if data_type == OrderedDict:
+        return OrderedDict({k: data_dict[k] for k in keys_to_include})
+    elif data_type == StateDict:
+        return StateDict({k: data_dict[k] for k in keys_to_include}, dtype=data_dict.dtype, device=data_dict.device)
+    else:
+        return {k: data_dict[k] for k in keys_to_include}
 
 
 class StateDict(OrderedDict):
@@ -132,7 +176,19 @@ class StateDict(OrderedDict):
         > state.describe(display=False, include_keys=['norm1', 'norm2'])
         {'norm1': 235752.828125, 'norm2': 113.10881805419922}
 
-    The third way is to visualize the statistics by plotting.
+    The third way is to visualize the statistics by plotting. The plotting API automatically plot and save the figures to `_nnstat_cache` folder.
+
+    .. code-block:: python
+
+        # plot the histogram
+        state.hist()
+        # plot the ecdf for each layer whose name contains "conv"
+        state.ecdf(layerwise=True, pattern=".*conv.*")
+        # change the cahce directory
+        nnstat.utils.set_cache_dir("my_cache_dir")
+        # plot the heatmap for each layer whose name contains "conv"
+        state.abs().heatmap(layerwise=True, pattern=".*conv.*")
+
     """
 
     # region: basic
@@ -261,23 +317,31 @@ class StateDict(OrderedDict):
         """
         return set(self.keys()) == set(other.keys())
 
-    def flatten(self, lazy=True) -> torch.Tensor:
+    def flatten(
+        self,
+        lazy=True,
+        pattern: Union[str, List[str]] = None,
+    ) -> torch.Tensor:
         """Flatten the state dict into a single tensor.
 
         Args:
-            lazy (bool, optional): If True, return the cached flattened tensor. Defaults to True.
+            lazy (bool, optional): If True, return the cached flattened tensor. Defaults to True. This cannot be used together with pattern.
+            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
 
         Returns:
             torch.Tensor: flattened tensor
         """
+        assert not lazy or pattern is None
         if lazy:
             if self._flattened is None:
                 self._flattened = torch.cat([value.flatten() for value in self.values()])
             return self._flattened
-        return torch.cat([value.flatten() for value in self.values()])
+        if pattern is None:
+            return torch.cat([value.flatten() for value in self.values()])
+        return filter_dict(self, pattern).flatten()
 
     # endregion: basic-functions
-    # region: basic-math
+    # region: math-update
     def __neg__(self) -> "StateDict":
         return StateDict({key: -value for key, value in self.items()}, device=self.device, copy=self.copy)
 
@@ -377,8 +441,8 @@ class StateDict(OrderedDict):
         Returns:
             StateDict: state dict of zeros
         """
-        for key, value in self.items():
-            self[key] = torch.zeros_like(value)
+        for value in self.values():
+            value.zero_()
         return self
 
     def sign(self) -> "StateDict":
@@ -395,12 +459,38 @@ class StateDict(OrderedDict):
         Returns:
             StateDict: sign
         """
-        for key, value in self.items():
-            self[key] = value.sign()
+        for value in self.values():
+            value.sign_()
+        return self
+
+    def clip(self, min: float = None, max: float = None) -> "StateDict":
+        """Clip the state dict inplace.
+
+        Args:
+            min (float, optional): min. Defaults to None.
+            max (float, optional): max. Defaults to None.
+
+        Returns:
+            StateDict: clipped state dict
+        """
+        return StateDict({key: value.clip(min=min, max=max) for key, value in self.items()}, device=self.device)
+
+    def clip_(self, min: float = None, max: float = None) -> "StateDict":
+        """Clip the state dict inplace.
+
+        Args:
+            min (float, optional): min. Defaults to None.
+            max (float, optional): max. Defaults to None.
+
+        Returns:
+            StateDict: clipped state dict
+        """
+        for value in self.values():
+            value.clip_(min=min, max=max)
         return self
 
     # endregion: basic-math
-    # region: math
+    # region: math-reduction
     def apply_reduction(
         self, func: Callable, layerwise: bool = False, pattern: Union[str, List[str]] = None, **kwargs
     ) -> Union[float, Dict]:
@@ -415,7 +505,7 @@ class StateDict(OrderedDict):
             Union[float, Dict]: result
         """
         if layerwise:
-            return pattern_filter({key: func(value, **kwargs) for key, value in self.items()}, pattern)
+            return filter_dict({key: func(value, **kwargs) for key, value in self.items()}, pattern)
         return func(self.flatten(), **kwargs)
 
     def register_reduction(self, name: str, func: Callable):
@@ -465,7 +555,7 @@ class StateDict(OrderedDict):
         """
         if layerwise:
             names = {key: key for key in self.keys()}
-            return pattern_filter(names, pattern)
+            return filter_dict(names, pattern)
         return self._name
 
     def numel(self, *, layerwise: bool = False, pattern: Union[str, List[str]] = None) -> Union[int, Dict]:
@@ -707,7 +797,7 @@ class StateDict(OrderedDict):
             assert layerwise
             for k, result in additional_info.items():
                 stat = itemize(result)
-                stat = pattern_filter(stat, pattern)
+                stat = filter_dict(stat, pattern)
                 if display:
                     ret[k] = stat.values()
                 else:
@@ -722,6 +812,107 @@ class StateDict(OrderedDict):
             print(ret_str)
         else:
             return ret
+
+    def hist(
+        self,
+        layerwise: bool = False,
+        pattern: Union[str, List[str]] = None,
+        name: str = None,
+        *,
+        bins: int = 100,
+        logx: bool = False,
+        logy: bool = False,
+        **kwargs,
+    ):
+        """Plot histogram of the state dict.
+
+        Args:
+            layerwise (bool, optional): If True, plot histograms per layer. Defaults to False.
+            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            name (str, optional): name. Defaults to None.
+            bins (int, optional): number of bins. Defaults to 100.
+            logx (bool, optional): log scale of x axis. Defaults to False.
+            logy (bool, optional): log scale of y axis. Defaults to False.
+        """
+        if name is None:
+            if self._name is None:
+                name = f"hist_{get_time()}"
+            else:
+                name = f"{self._name}_hist_{get_time()}"
+        if not layerwise:
+            logger.warning("Histogram of all parameters comsumes a lot of time.")
+            values = self.flatten(pattern=pattern)
+            plot_hist(values, bins=bins, logx=logx, logy=logy, name=name, **kwargs)
+        else:
+            for key, value in self.items():
+                plot_hist(value, bins=bins, logx=logx, logy=logy, directory=name, name=key, **kwargs)
+
+    def ecdf(
+        self,
+        layerwise: bool = False,
+        pattern: Union[str, List[str]] = None,
+        name: str = None,
+        *,
+        logx: bool = False,
+        logy: bool = False,
+    ):
+        """Plot Empirical Cumulative Distribution Function (ECDF) of the state dict.
+
+        Args:
+            layerwise (bool, optional): If True, plot ECDFs per layer. Defaults to False.
+            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            name (str, optional): name. Defaults to None.
+            logx (bool, optional): log scale of x axis. Defaults to False.
+            logy (bool, optional): log scale of y axis. Defaults to False.
+        """
+        if name is None:
+            if self._name is None:
+                name = f"ecdf_{get_time()}"
+            else:
+                name = f"{self._name}_ecdf_{get_time()}"
+        if not layerwise:
+            logger.warning("ECDF of all parameters comsumes a lot of time.")
+            values = self.flatten(pattern=pattern)
+            plot_ecdf(values, logx=logx, logy=logy, name=name)
+        else:
+            for key, value in self.items():
+                plot_ecdf(value, logx=logx, logy=logy, directory=name, name=key)
+
+    def heatmap(
+        self,
+        layerwise: bool = False,
+        pattern: Union[str, List[str]] = None,
+        name: str = None,
+        *,
+        vmin: float = None,
+        vmax: float = None,
+        log: bool = False,
+        square: bool = False,
+        **kwargs,
+    ):
+        """Plot heatmap of the state dict.
+
+        Args:
+            layerwise (bool, optional): If True, plot heatmaps per layer. Defaults to False.
+            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            name (str, optional): name. Defaults to None.
+            vmin (float, optional): min value. Defaults to None.
+            vmax (float, optional): max value. Defaults to None.
+            log (bool, optional): log scale. Defaults to False.
+            square (bool, optional): square shape. Defaults to True.
+        """
+        if name is None:
+            if self._name is None:
+                name = f"heatmap_{get_time()}"
+            else:
+                name = f"{self._name}_heatmap_{get_time()}"
+        if not layerwise:
+            logger.warning("Heatmap of all parameters comsumes a lot of time.")
+            values = self.flatten(pattern=pattern)
+            plot_heatmap(values, vmin=vmin, vmax=vmax, log=log, square=square, name=name, **kwargs)
+        else:
+            for key, value in self.items():
+                plot_heatmap(value, vmin=vmin, vmax=vmax, log=log, square=square, directory=name, name=key, **kwargs)
 
 
 # region: factory

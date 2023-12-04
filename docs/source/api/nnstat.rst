@@ -1,7 +1,7 @@
-.. _nnstat:
+.. _api.nnstat:
 
 nnstat
-========
+======
 
 .. automodule:: nnstat.core
 

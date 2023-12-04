@@ -24,37 +24,7 @@ A toolkit to track and analyze the status and statistics of neural network.
 - [ ] update strength related
 - [ ] Initialization related
 - [ ] Frequency related
-
-梯度相关性；最大学习率与梯度方向（学习率分配问题，如何 Diverge）；激活值稀疏性与 Adam 关系
-
-## Optimizer TestBet
-
-- [nanoGPT](https://github.com/karpathy/nanoGPT): GPT-2
-
-## Install
-
-Download the source code and install it by pip.
-
-```bash
-cd nnstat
-pip install -e .
-```
-
-## Basic
-
-The `NetDict` class also provides many visualization methods to visualize each layer. Figures are saved to `cache_nnstat` directory by default.
-
-```python
-W0.hist() # plot the histogram of W0
-W0.ecdf(pattern="proj") # plot the ecdf of W0 for each layer whose name contains "proj"
-W0.heatmap(op="abs", pattern="ln", log=True) # plot the heatmap of W0 for each layer whose name contains "ln"
-```
-
-To log the statistics of neural network, you can log the statistics to Tensorboard, Wandb, etc.
-
-```python
-wandb.log(W0.describe(display=False), step=step)
-```
+- 梯度相关性；最大学习率与梯度方向（学习率分配问题，如何 Diverge）；激活值稀疏性与 Adam 关系
 
 ## Advanced
 
