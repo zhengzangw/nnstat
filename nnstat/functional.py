@@ -17,7 +17,7 @@ def compute_update(w0: StateDict, w1: StateDict, alpha: float = 1.0) -> StateDic
 
 
 def compute_adam_update(m: StateDict, v: StateDict, eps: float = 1e-6):
-    """Compute the update of Adam by :math:`m / (\\sqrt{v} + \\epsilon)`.
+    """Compute the update of Adam without bias correction by :math:`m / (\\sqrt{v} + \\epsilon)`.
 
     Args:
         m (StateDict): first moment
@@ -30,10 +30,13 @@ def compute_adam_update(m: StateDict, v: StateDict, eps: float = 1e-6):
     return m / (v.sqrt() + eps)
 
 
-def compute_trust_ratio():
-    """From `Large Batch Training of Convolutional Networks <https://arxiv.org/abs/1708.03888>`_
+def compute_trust_ratio(weight: StateDict, update: StateDict):
+    """From `Large Batch Training of Convolutional Networks <https://arxiv.org/abs/1708.03888>`_. Compute the trust ratio by :math:`||w||_2 / ||update||_2` for each layer.
     """
-    pass
+    assert weight.is_compatible(update)
+    return (weight / update).abs()
+
+# inplement axis
 
 # def compute_trust_ratio(
 #     w0: Union[NetDict, nn.Module],
