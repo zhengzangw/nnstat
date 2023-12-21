@@ -5,7 +5,7 @@ A toolkit to track and analyze the status and statistics of neural network.
 - Tracking: easily compute the status and statistics of neural network and can be recorded by Tensorboard, Wandb, etc.
 - Analyze: easily analyze and visualize the status of neural networks.
 
-Check the [documentation](.) for more details.
+Check the [Documentation](https://zhengzangw.github.io/nnstat/) and [Getting Started](https://zhengzangw.github.io/nnstat/tutorials/getting_started.html) for more details.
 
 ## Todo
 

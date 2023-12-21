@@ -36,9 +36,9 @@ html_context = {
     "conf_py_path": "/docs/source/",
 }
 html_theme_options = {
-    "home_url": "",
+    "home_url": "https://zhengzangw.github.io/nnstat/",
     "github_url": github_url,
-    "doc_items": {"NNstat": ""},
+    "doc_items": {"NNstat": "https://zhengzangw.github.io/nnstat/"},
     "logo": logo_img,
     "logo_dark": logo_img,
     "logo_icon": logo_img,
