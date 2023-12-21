@@ -1,40 +1,40 @@
-from .core import StateDict
+# from .core import StateDict
 
 
-def compute_update(w0: StateDict, w1: StateDict, alpha: float = 1.0) -> StateDict:
-    """Compute the update of the optimizer by :math:`(w_1 - w_0)/\\alpha`.
+# def compute_update(w0: StateDict, w1: StateDict, alpha: float = 1.0) -> StateDict:
+#     """Compute the update of the optimizer by :math:`(w_1 - w_0)/\\alpha`.
 
-    Args:
-        w0 (StateDict): initial state dict
-        w1 (StateDict): final state dict
-        alpha (float, optional): step size. Defaults to 1.0.
+#     Args:
+#         w0 (StateDict): initial state dict
+#         w1 (StateDict): final state dict
+#         alpha (float, optional): step size. Defaults to 1.0.
 
-    Returns:
-        StateDict: update
-    """
-    assert w0.is_compatible(w1)
-    return (w1 - w0) / alpha
-
-
-def compute_adam_update(m: StateDict, v: StateDict, eps: float = 1e-6):
-    """Compute the update of Adam without bias correction by :math:`m / (\\sqrt{v} + \\epsilon)`.
-
-    Args:
-        m (StateDict): first moment
-        v (StateDict): second moment
-        eps (float, optional): epsilon. Defaults to 1e-6.
-
-    Returns:
-        StateDict: update
-    """
-    return m / (v.sqrt() + eps)
+#     Returns:
+#         StateDict: update
+#     """
+#     assert w0.is_compatible(w1)
+#     return (w1 - w0) / alpha
 
 
-def compute_trust_ratio(weight: StateDict, update: StateDict):
-    """From `Large Batch Training of Convolutional Networks <https://arxiv.org/abs/1708.03888>`_. Compute the trust ratio by :math:`||w||_2 / ||update||_2` for each layer.
-    """
-    assert weight.is_compatible(update)
-    return (weight / update).abs()
+# def compute_adam_update(m: StateDict, v: StateDict, eps: float = 1e-6):
+#     """Compute the update of Adam without bias correction by :math:`m / (\\sqrt{v} + \\epsilon)`.
+
+#     Args:
+#         m (StateDict): first moment
+#         v (StateDict): second moment
+#         eps (float, optional): epsilon. Defaults to 1e-6.
+
+#     Returns:
+#         StateDict: update
+#     """
+#     return m / (v.sqrt() + eps)
+
+
+# def compute_trust_ratio(weight: StateDict, update: StateDict):
+#     """From `Large Batch Training of Convolutional Networks <https://arxiv.org/abs/1708.03888>`_. Compute the trust ratio by :math:`||w||_2 / ||update||_2` for each layer.
+#     """
+#     assert weight.is_compatible(update)
+#     return (weight / update).abs()
 
 # inplement axis
 

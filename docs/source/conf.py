@@ -16,8 +16,8 @@ pkg_location = path.dirname(path.dirname(pkg_file))
 # -- General configuration ------------------------------------------------
 
 project = "NNstat"
-author = "NNstat"
-copyright = f"2023, {author}"
+author = "zhengzangw"
+copyright = f"2023, {project} Contributors"
 
 github_user = author
 github_repo = pkg_name

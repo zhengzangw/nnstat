@@ -5,7 +5,7 @@ See :doc:`/tutorials/getting_started` for basic usage.
 import logging
 import re
 from collections import OrderedDict
-from typing import Callable, Dict, List, Union
+from typing import Callable, Dict, List, Union, Any
 
 import pandas as pd
 import torch
@@ -15,11 +15,13 @@ from scipy import stats
 from . import utils
 
 __all__ = [
+    "from_state_dict",
     "from_weight",
     "from_grad",
     "from_optimizer_state",
     "from_together",
-    "from_state_dict",
+    "from_activation",
+    "from_activation_grad",
     "StateDict",
     "load",
 ]
@@ -58,11 +60,12 @@ columns_group = dict(
         "norm1_mean",
         "norm2",
     ],
-    _light_dict=[
+    _light=[
         "no",
         "name",
         "value",
     ],
+    custom=[],
 )
 
 
@@ -73,7 +76,7 @@ class Pattern:
         else:
             self.pattern = re.compile(pattern)
 
-    def match(self, s: str):
+    def match(self, s: str) -> bool:
         if self.pattern is None:
             return True
         return self.pattern.match(s) is not None
@@ -91,12 +94,15 @@ def from_state_dict(
 ) -> "StateDict":
     """Create a StateDict from a raw state dict.
 
+    >>> state = nnstat.from_state_dict(model.state_dict())
+
     Args:
         raw_state_dict (Dict[str, torch.Tensor]): raw state dict
-        device (str, optional): device. Defaults to None.
-        dtype (torch.dtype, optional): dtype. Defaults to None.
-        copy (bool, optional): copy and detach tensors. Defaults to False.
-        name (str, optional): name. Defaults to None.
+        pattern (Union[None, str], optional): regex pattern to filter keys. Only keys that match the pattern will be kept. Defaults to None, which means no filtering.
+        clone (bool, optional): ``clone=False`` means that the tensors in returned state dict shares the same memory with the one in the model except being detached. Use ``clone=True`` to make a snapshot of the state dict. Use ``device="cpu"`` to save GPU memory. When ``copy=False``, you :abbr:`cannot` set ``device`` and ``dtype``.. Defaults to False.
+        device (str, optional): device used for moving. Defaults to None, which means no moving. This cannot be used together with ``clone=False``.
+        dtype (torch.dtype, optional): dtype used for casting. Defaults to None, which means no casting. This cannot be used together with ``clone=False``.
+        name (str, optional): name of the state dict. Defaults to None.
 
     Returns:
         StateDict: state dict
@@ -124,15 +130,18 @@ def from_weight(
     dtype: torch.dtype = None,
     name: str = None,
 ) -> "StateDict":
-    """Create a StateDict from a model.
+    """Create a StateDict containing weights (parameters) from PyTorch a model.
+
+    >>> state = nnstat.from_weight(model)
 
     Args:
         model (nn.Module): model
-        requires_grad (bool, optional): keep track of gradient-needed ones. Defaults to False.
-        device (str, optional): device. Defaults to None.
-        dtype (torch.dtype, optional): dtype. Defaults to None.
-        copy (bool, optional): copy and detach tensors. Defaults to False.
-        name (str, optional): name. Defaults to None.
+        pattern (Union[None, str], optional): regex pattern to filter keys. Only keys that match the pattern will be kept. Defaults to None, which means no filtering.
+        requires_grad (bool, optional): only keep parameters with ``requires_grad=True``. Defaults to False.
+        clone (bool, optional): ``clone=False`` means that the tensors in returned state dict shares the same memory with the one in the model except being detached. Use ``clone=True`` to make a snapshot of the state dict. Use ``device="cpu"`` to save GPU memory. When ``copy=False``, you :abbr:`cannot` set ``device`` and ``dtype``.. Defaults to False.
+        device (str, optional): device used for moving. Defaults to None, which means no moving. This cannot be used together with ``clone=False``.
+        dtype (torch.dtype, optional): dtype used for casting. Defaults to None, which means no casting. This cannot be used together with ``clone=False``.
+        name (str, optional): name of the state dict. Defaults to None.
 
     Returns:
         StateDict: state dict of weights
@@ -162,14 +171,18 @@ def from_grad(
     dtype: torch.dtype = None,
     name: str = None,
 ) -> "StateDict":
-    """Create a StateDict from a model. gradient is different.
+    """Create a StateDict containing gradients from PyTorch a model.
+
+    >>> loss.backward()
+    >>> state = nnstat.from_grad(model)
 
     Args:
         model (nn.Module): model
-        device (str, optional): device. Defaults to None.
-        dtype (torch.dtype, optional): dtype. Defaults to None.
-        copy (bool, optional): copy and detach tensors. Defaults to False.
-        name (str, optional): name. Defaults to None.
+        pattern (Union[None, str], optional): regex pattern to filter keys. Only keys that match the pattern will be kept. Defaults to None, which means no filtering.
+        clone (bool, optional): ``clone=False`` means that the tensors in returned state dict shares the same memory with the one in the model except being detached. Use ``clone=True`` to make a snapshot of the state dict. Use ``device="cpu"`` to save GPU memory. When ``copy=False``, you :abbr:`cannot` set ``device`` and ``dtype``.. Defaults to False.
+        device (str, optional): device used for moving. Defaults to None, which means no moving. This cannot be used together with ``clone=False``.
+        dtype (torch.dtype, optional): dtype used for casting. Defaults to None, which means no casting. This cannot be used together with ``clone=False``.
+        name (str, optional): name of the state dict. Defaults to None.
 
     Returns:
         StateDict: state dict of gradients
@@ -201,19 +214,22 @@ def from_optimizer_state(
     dtype: torch.dtype = None,
     name: str = None,
 ) -> "StateDict":
-    """Create a StateDict from a model and an optimizer.
+    """Create a StateDict containing optimizer states from a model and an optimizer.
+
+    >>> state = nnstat.from_optimizer_state(model, optimizer, optimizer_key="exp_avg")
 
     Args:
         model (nn.Module): model
         optimizer (torch.optim.Optimizer): optimizer
-        optimizer_key (str, optional): k of optimizer state. Defaults to None.
-        device (str, optional): device. Defaults to None.
-        dtype (torch.dtype, optional): dtype. Defaults to None.
-        copy (bool, optional): copy and detach tensors. Defaults to False.
-        name (str, optional): name. Defaults to None.
+        optimizer_key (str, optional): key of optimizer state. Defaults to None. For adam, ``"exp_avg"`` can be used.
+        pattern (Union[None, str], optional): regex pattern to filter keys. Only keys that match the pattern will be kept. Defaults to None, which means no filtering.
+        clone (bool, optional): ``clone=False`` means that the tensors in returned state dict shares the same memory with the one in the model except being detached. Use ``clone=True`` to make a snapshot of the state dict. Use ``device="cpu"`` to save GPU memory. When ``copy=False``, you :abbr:`cannot` set ``device`` and ``dtype``.. Defaults to False.
+        device (str, optional): device used for moving. Defaults to None, which means no moving. This cannot be used together with ``clone=False``.
+        dtype (torch.dtype, optional): dtype used for casting. Defaults to None, which means no casting. This cannot be used together with ``clone=False``.
+        name (str, optional): name of the state dict. Defaults to None.
 
     Returns:
-        StateDict: state dict of optimizer state
+        StateDict: state dict of optimizer states
     """
     assert (device is None and dtype is None) or clone, "device and dtype can only be set when clone is True"
     state = StateDict()
@@ -239,16 +255,22 @@ def from_together(
     clone: bool = False,
     device: str = None,
     dtype: torch.dtype = None,
-) -> tuple:
-    """Create weight, grad, optim status state dicts from a model and an optimizer.
+) -> tuple["StateDict", "StateDict", List["StateDict"]]:
+    """Create a StateDict containing weights, gradients, and optimizer states from a model and an optimizer.
+
+    >>> state = nnstat.from_together(model, optimizer, optimizer_keys=["exp_avg", "exp_avg_sq"])
 
     Args:
         model (nn.Module): model
         optimizer (torch.optim.Optimizer): optimizer
-        optimizer_keys (List[str], optional): keys of optimizer state. Defaults to None. For adam, ``["exp_avg", "exp_avg_sq"]`` can be used.
+        optimizer_keys (List[str], optional): keys of optimizer states. Defaults to None. For adam, ``["exp_avg", "exp_avg_sq"]`` can be used.
+        pattern (Union[None, str], optional): regex pattern to filter keys. Only keys that match the pattern will be kept. Defaults to None, which means no filtering.
+        clone (bool, optional): ``clone=False`` means that the tensors in returned state dict shares the same memory with the one in the model except being detached. Use ``clone=True`` to make a snapshot of the state dict. Use ``device="cpu"`` to save GPU memory. When ``copy=False``, you :abbr:`cannot` set ``device`` and ``dtype``.. Defaults to False.
+        device (str, optional): device used for moving. Defaults to None, which means no moving. This cannot be used together with ``clone=False``.
+        dtype (torch.dtype, optional): dtype used for casting. Defaults to None, which means no casting. This cannot be used together with ``clone=False``.
 
     Returns:
-        tuple: weight state, grad state, optimizer states
+        tuple[StateDict, StateDict, List[StateDict]]: state dict of weights, gradients, and optimizer states
     """
     weight_state = from_weight(model, pattern=pattern, clone=clone, device=device, dtype=dtype)
     grad_state = from_grad(model, pattern=pattern, clone=clone, device=device, dtype=dtype)
@@ -267,8 +289,6 @@ def load(path: str, name: str = None) -> "StateDict":
 
     Args:
         path (str): path to file
-        device (str, optional): device. Defaults to None.
-        dtype (torch.dtype, optional): dtype. Defaults to None.
         name (str, optional): name. Defaults to None.
 
     Returns:
@@ -277,89 +297,105 @@ def load(path: str, name: str = None) -> "StateDict":
     return StateDict(torch.load(path, map_location="cpu"), name=name)
 
 
+class ForwardHook:
+    def __init__(self, model: nn.Module, pattern: Union[None, str] = None):
+        self.pattern = Pattern(pattern)
+        self.model = model
+        self.hooks = {}
+        self.state_dict = StateDict()
+
+        for name, module in model.named_modules():
+            if self.pattern.match(name):
+                self.hooks[name] = module.register_forward_hook(self._get_hook_fn(name))
+
+    def _get_hook_fn(self, name: str) -> Callable:
+        def _hook_fn(module, input, output):
+            self.state_dict[name] = output.detach()
+
+        return _hook_fn
+
+    def __del__(self):
+        for hook in self.hooks.values():
+            hook.remove()
+
+
+def from_activation(model: nn.Module, pattern: Union[None, str] = None) -> ForwardHook:
+    """Register forward hooks to a model. The state dict of activations will be stored in the ``state_dict`` attribute of the returned object. After a forward pass, the state dict will be updated.
+
+    >>> state = nnstat.from_activation(model) # state is empty
+    >>> model(x) # forward pass
+    >>> print(state) # state is updated
+
+    Args:
+        model (nn.Module): model
+        pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
+
+    Returns:
+        ForwardHook: class for wrapping forward hooks and has a ``state_dict`` attribute
+    """
+    forward_hooks = ForwardHook(model, pattern=pattern)
+    return forward_hooks
+
+
+class BackwardHook:
+    def __init__(self, model: nn.Module, pattern: Union[None, str] = None):
+        self.pattern = Pattern(pattern)
+        self.model = model
+        self.hooks = {}
+        self.state_dict = StateDict()
+
+        for name, module in model.named_modules():
+            if self.pattern.match(name):
+                self.hooks[name] = module.register_full_backward_hook(self._get_hook_fn(name))
+
+    def _get_hook_fn(self, name: str) -> Callable:
+        def _hook_fn(module, grad_input, grad_output):
+            self.state_dict[name] = grad_output[0].detach()
+
+        return _hook_fn
+
+    def __del__(self):
+        for hook in self.hooks.values():
+            hook.remove()
+
+
+def from_activation_grad(model: nn.Module, pattern: Union[None, str] = None) -> "StateDict":
+    """Register backward hooks to a model. The state dict of gradients of activations will be stored in the ``state_dict`` attribute of the returned object. After a backward pass, the state dict will be updated.
+
+    >>> state = nnstat.from_activation_grad(model) # state is empty
+    >>> loss.backward() # backward pass
+    >>> print(state) # state is updated
+
+    Args:
+        model (nn.Module): model
+        pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
+
+    Returns:
+        BackwardHook: class for wrapping backward hooks and has a ``state_dict`` attribute
+    """
+    backward_hooks = BackwardHook(model, pattern=pattern)
+    return backward_hooks
+
+
 # endregion: factory
 
 
 class StateDict(OrderedDict):
     """
-    ``StateDict`` is the main class of nnstat. ``StateDict`` is a subclass of ``OrderedDict``, which has the same structure as the return of ``model.state_dict()``. It provides many useful functions to analyze the state dict and supports basic math operations. All values will be detached automatically. For example:
+    ``StateDict`` is the main class of nnstat. The keys are supposed to be the names of PyTorch modules. The values can be (detached) tensors or other objects. It provides many useful functions to analyze the state dict and supports basic math operations. Methods of ``StateDict`` are divided into three categories: update, reduction, and visualization.
 
-    >>> import nnstat
-    >>> from torchvision import models
-    >>> state = nnstat.from_state_dict(models.resnet18().state_dict())
-    # or in a recommended way
-    >>> state = nnstat.from_weight(models.resnet18())
-    >>> print(state)
-    StateDict[L1=2.407e+05, L2=132.6, Numel=11,699,132]
-    (
-        00: conv1.weight                (64, 3, 7, 7)
-        01: bn1.weight                  (64,)
-        02: bn1.bias                    (64,)
-        03: bn1.running_mean            (64,)
-        04: bn1.running_var             (64,)
-        05: bn1.num_batches_tracked     ()
-        (...truncated)
-    )
+    * **Update functions** will return a state dict with the same keys and shapes as the input state dict. More details can be found in apply method :meth:`apply`. Examples include :meth:`abs`, :meth:`clip`, :meth:`sign`, etc.
 
-    Math Functions
-    ----------------
+    * **Reduction functions** will return a scalar or a dict of scalars. More details can be found in apply_reduction method :meth:`apply_reduction`. Examples include :meth:`norm`, :meth:`mean`, :meth:`var`, etc. All reduction functions support a ``lw`` argument, which means "layer-wise" applying reduction, and a ``pattern`` argument to filter keys. Otherwise, the reduction will be applied to the whole state dict.
 
-    The math functions can be categorized into two types. The first type applys element-wise operations to each tensor in the state dict. For example, to calculate adam update for analysis, we can do
+    * **Visualization functions** will give a summary of the state dict. This includes :meth:`describe`, :meth:`hist`, :meth:`ecdf`, and :meth:`heatmap`.
 
-    .. code-block:: python
-
-        m = nnstat.from_optimizer_state(model, optimizer, optimizer_key="exp_avg")
-        v = nnstat.from_optimizer_state(model, optimizer, optimizer_key="exp_avg_sq")
-        update = m / (v.sqrt() + 1e-8)
-
-
-    The second type applys reduction operations to the flattened state dict. These methods have a ``lw`` argument, which can be set to True to return a dict of results per layer. For example, to calculate the L1 norm of the state dict, we can do
-
-    >>> state.norm1(p=2)
-    tensor(113.1479)
-    >>> state.norm1(p=2, lw=True)
-    {'conv1.weight': tensor(2.4467), 'bn1.weight': tensor(8.), 'bn1.bias': tensor(0.), 'layer1.0.conv1.weight': tensor(11.2160), (...truncated)}
-    # use regex to filter keys
-    >>> state.norm1(p=2, lw=True, pattern=".*conv.*")
-    {'conv1.weight': tensor(2.4467), 'layer1.0.conv1.weight': tensor(11.2160), 'layer1.0.conv2.weight': tensor(11.3411), (...truncate)}
-
-    Visualization
-    ----------------
-
-    We provide three ways to effectively examine the state dict status. The first is to use ``describe`` method for debugging in terminal, which can display a summary of the state dict.
-
-    >>> state.describe()
-    [============================ Stats ResNet_weights ============================]
-    name            shape         numel     norm1         norm1_mean  norm2
-    0  ResNet_weights  (11689512,)  11689512  235774.53125  0.02017     113.108963
-    >>> state.describe(lw=True, pattern=".*conv.*")
-    [=========================== Stats ResNet_weights ===========================]
-        name                   shape              numel    norm1        norm2
-    0   conv1.weight              (64, 3, 7, 7)     9408    188.525146   2.438898
-    1   layer1.0.conv1.weight    (64, 64, 3, 3)    36864   1736.147461  11.318304
-    2   layer1.0.conv2.weight    (64, 64, 3, 3)    36864   1736.389282  11.336217
-    3   layer1.1.conv1.weight    (64, 64, 3, 3)    36864   1733.171997  11.316651
-    4   layer1.1.conv2.weight    (64, 64, 3, 3)    36864   1724.930786  11.236347
-    (...truncated)
-
-    The second way is to export the statistics for tools such as tensorboard and wandb. To export the statistics, do the following:
-
-    >>> state.describe(display=False, include_keys=['norm1', 'norm2'])
-    {'norm1': 235752.828125, 'norm2': 113.10881805419922}
-
-    The third way is to visualize the statistics by plotting. The plotting API automatically plot and save the figures to :file:`_nnstat_cache` folder.
-
-    .. code-block:: python
-
-        # plot the histogram
-        state.hist()
-        # plot the ecdf for each layer whose name contains "conv"
-        state.ecdf(lw=True, pattern=".*conv.*")
-        # change the cahce directory
-        nnstat.utils.set_cache_dir("my_cache_dir")
-        # plot the heatmap for each layer whose name contains "conv"
-        state.abs().heatmap(lw=True, pattern=".*conv.*")
-
+    :ivar str _name: name of the state dict. This is used for display.
+    :ivar bool _is_tensor: whether all values are tensors
+    :ivar bool _light_dict: a light dict means that all values are scalars (or strings). A light dict is typically a result of reduction functions. Light dicts have different display styles.
+    :ivar str device: device for moving tensors. If None, the current device is used.
+    :ivar torch.dtype dtype: dtype for casting tensors. If None, the current dtype is used.
+    :ivar Union[None, torch.Tensor, List] _flattened: holder for the flattened tensor. This is used for lazy evaluation.
     """
 
     # region: basic
@@ -369,21 +405,10 @@ class StateDict(OrderedDict):
         name: str = None,
         **kwargs,
     ):
-        """Avoid calling class ``__init__`` directly. Instead, create StateDict using the factory functions such as :func:`from_state_dict`, :func:`from_weight`, :func:`from_grad`, :func:`from_optimizer_state`, :func:`from_together`.
-
-        .. caution::
-
-            Use ``copy=True`` to avoid modifying the original values.
-
-            Use ``copy=True`` and ``device="cpu"`` to save GPU memory.
-
-            Use ``copy=False`` to save memory and accelerate computing. When ``copy=False``, you :abbr:`cannot` set ``device`` and ``dtype``.
+        """``StateDict`` is a subclass of ``OrderedDict``. Avoid calling class ``__init__`` directly. Instead, create StateDict using the factory functions such as :func:`from_state_dict`, :func:`from_weight`, :func:`from_grad`, :func:`from_optimizer_state`, :func:`from_together`, :func:`from_activation`, and :func:`from_activation_grad`.
 
         Args:
-            name (str, optional): The name of the state dict. Defaults to None.
-            copy (bool, optional): Make a copy of the original tensors. This can avoid modifying original values. Defaults to False.
-            device (str, optional): The device of the state dict. All tensors in state dict are assumed to be on the same device. All tensors and tensors added in the future will be moved to the device. Defaults to None.
-            dtype (torch.dtype, optional): The dtype of the state dict. All tensors in state dict are assumed to be of the same dtype. All tensors and tensors added in the future will be casted to the dtype. Defaults to None.
+            name (str, optional): name of the state dict. Defaults to None.
         """
         self._name = name if name is not None else self.__class__.__name__
         self._flattened = None
@@ -408,10 +433,14 @@ class StateDict(OrderedDict):
         super().__setitem__(k, v)
 
     def clone(self, device: str = None, dtype: torch.dtype = None) -> "StateDict":
-        """Clone the state dict.
+        """Make a clone of the state dict.
+
+        Args:
+            device (str, optional): device. None means the current device. Defaults to None.
+            dtype (torch.dtype, optional): dtype. None means the current dtype. Defaults to None.
 
         Returns:
-            StateDict: cloned state dict with the same device and dtype
+            StateDict: cloned state dict
         """
         assert self._is_tensor or (device is None and dtype is None)
         state_dict = StateDict(name=f"{self._name}_clone")
@@ -423,11 +452,7 @@ class StateDict(OrderedDict):
         return state_dict
 
     def to(self, device: str = None, dtype: torch.dtype = None) -> "StateDict":
-        """Move the state dict to a device and cast to a dtype.
-
-        .. warning::
-
-            This method will modify the state dict inplace and force all future tensors to be on the same device and of the same dtype.
+        """Move the state dict to a device and cast to a dtype inplacely.
 
         Args:
             device (str, optional): device. None means the current device. Defaults to None.
@@ -443,10 +468,10 @@ class StateDict(OrderedDict):
             self[k] = self[k].to(device=device, dtype=dtype)
         return self
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.__str__()
 
-    def __str__(self):
+    def __str__(self) -> str:
         keys = list(self.keys())
 
         if len(keys) == 0:
@@ -483,22 +508,22 @@ class StateDict(OrderedDict):
             self._name = name
         return self
 
-    def at(self, index: int) -> torch.Tensor:
-        """Get the v at a given index.
+    def at(self, index: int) -> Union[torch.Tensor, Any]:
+        """Get the value at a given index.
 
         Args:
             index (int): index
 
         Returns:
-            torch.Tensor: v
+            Union[torch.Tensor, Any]: value at the index
         """
         return self[list(self.keys())[index]]
 
-    def state_dict(self) -> dict[str, torch.Tensor]:
+    def state_dict(self) -> Union[dict[str, torch.Tensor], dict[str, Any]]:
         """Return a state dict of type dict, which can be loaded by ``torch.load``.
 
         Returns:
-            dict[str, torch.Tensor]: state dict
+            Union[dict[str, torch.Tensor], dict[str, Any]]: state dict of type ``dict``
         """
         return {k: self[k] for k in self}
 
@@ -526,18 +551,18 @@ class StateDict(OrderedDict):
         lazy=True,
         pattern: Union[None, str] = None,
     ) -> torch.Tensor:
-        """Flatten the state dict into a single tensor.
+        """Flatten the state dict.
 
-        .. warning::
+        .. note::
 
-            For now, reduction functions on the whole state dict are implemented on the flattened tensor. This means that the flattened tensor will be computed every time you call a reduction function. If you want to use reduction functions on the whole state dict frequently, you can set ``lazy=False`` to cache the flattened tensor. This will increase the memory usage.
+            Reduction functions on the whole state dict are implemented on the flattened tensor. By default, the flattened tensor is cached. If you want to use a different pattern, you should set ``lazy=False``.
 
         Args:
             lazy (bool, optional): If True, return the cached flattened tensor. Defaults to True. This cannot be used together with pattern.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            torch.Tensor: flattened tensor
+            torch.Tensor: If the value is a tensor, a flattened tensor will be returned. If the value is not a tensor, a list of values will be converted to a tensor and returned.
         """
         if pattern is not None or not self._is_tensor:
             lazy = False
@@ -550,15 +575,21 @@ class StateDict(OrderedDict):
         if self._is_tensor:
             return torch.cat([v.flatten() for k, v in self.items() if pattern.match(k)])
         else:
-            return [v for k, v in self.items() if pattern.match(k)]
+            return torch.tensor([v for k, v in self.items() if pattern.match(k)])
 
     # endregion: basic-functions
     # region: math-update
-    def apply(self, func: Callable[torch.Tensor, torch.Tensor]) -> "StateDict":
-        """Apply a function to each tensor in state dict.
+    def apply(self, func: Callable) -> "StateDict":
+        """This method is used to construct update functions. The update method applys element-wise operations to each tensor in the state dict, and returns a new state dict with the same keys and shapes as the input state dict. For example, we can use the following code to compute the adam update:
+
+        .. code-block:: python
+
+            m = nnstat.from_optimizer_state(model, optimizer, optimizer_key="exp_avg")
+            v = nnstat.from_optimizer_state(model, optimizer, optimizer_key="exp_avg_sq")
+            update = m / (v.sqrt() + 1e-8)
 
         Args:
-            func (Callable[torch.Tensor, torch.Tensor]): function
+            func (Callable): function
 
         Returns:
             StateDict: state dict with function applied
@@ -575,7 +606,7 @@ class StateDict(OrderedDict):
         """Filter the state dict by a pattern.
 
         Args:
-            pattern (Union[None, str]): pattern
+            pattern (Union[None, str]): regex pattern to filter keys. Only keys that match the pattern will be kept. Defaults to None, which means no filtering.
 
         Returns:
             StateDict: filtered state dict
@@ -626,19 +657,15 @@ class StateDict(OrderedDict):
         return StateDict({k: v**other for k, v in self.items()})
 
     def sqrt(self) -> "StateDict":
-        """Compute the square root of the state dict.
-
-        Returns:
-            StateDict: square root element-wise
-        """
+        """element-wise square root"""
         return self.apply(lambda x: x**0.5)
 
-    def abs(self) -> "StateDict":
-        """Compute the absolute v of the state dict.
+    def sqrt_(self) -> "StateDict":
+        """Inplace version of :meth:`sqrt`."""
+        return self.apply_(lambda x: x**0.5)
 
-        Returns:
-            StateDict: absolute v element-wise
-        """
+    def abs(self) -> "StateDict":
+        """element-wise absolute value"""
         if self._is_tensor:
             return self.apply(torch.abs)
         else:
@@ -653,11 +680,7 @@ class StateDict(OrderedDict):
         return self
 
     def zeros(self) -> "StateDict":
-        """Return a state dict of zeros with the same keys and shapes as the input state dict.
-
-        Returns:
-            StateDict: state dict of zeros
-        """
+        """Return a state dict of zeros with the same keys and shapes as the input state dict."""
         if self._is_tensor:
             return self.apply(torch.zeros_like)
         else:
@@ -672,11 +695,7 @@ class StateDict(OrderedDict):
         return self
 
     def ones(self) -> "StateDict":
-        """Return a state dict of ones with the same keys and shapes as the input state dict.
-
-        Returns:
-            StateDict: state dict of ones
-        """
+        """Return a state dict of ones with the same keys and shapes as the input state dict."""
         if self._is_tensor:
             return self.apply(torch.ones_like)
         else:
@@ -691,11 +710,7 @@ class StateDict(OrderedDict):
         return self
 
     def sign(self) -> "StateDict":
-        """Compute the sign of the state dict.
-
-        Returns:
-            StateDict: sign
-        """
+        """Compute the sign of the state dict."""
         if self._is_tensor:
             return self.apply(torch.sign)
         else:
@@ -713,8 +728,8 @@ class StateDict(OrderedDict):
         """Clip the state dict inplace.
 
         Args:
-            min (float, optional): min. Defaults to None.
-            max (float, optional): max. Defaults to None.
+            min (float, optional): min value. Defaults to None.
+            max (float, optional): max value. Defaults to None.
 
         Returns:
             StateDict: clipped state dict
@@ -740,16 +755,41 @@ class StateDict(OrderedDict):
         *,
         lw: bool = False,
         pattern: Union[None, str] = None,
-    ) -> Union[float, "StateDict"]:
-        """Apply a reduction function to the state dict.
+    ) -> Union["StateDict", Any]:
+        """Apply a reduction function to the state dict, or to each layer of the state dict. For example:
+
+        >>> state = nnstat.from_weight(model) # a resnet model
+        >>> state.norm(p=2)
+        tensor(98.5264)
+        >>> state.norm(p=2, lw=True)
+        ResNet_weights_stat
+        (
+            01: bn1.weight = 2.280656576156616
+            02: bn1.bias = 2.7802467346191406
+            03: layer1.0.conv1.weight = 10.269349098205566
+            04: layer1.0.bn1.weight = 2.8918473720550537
+            05: layer1.0.bn1.bias = 1.6855857372283936
+            (...truncate)
+        )
+        >>> state.norm(p=2, lw=True, pattern=".*conv.*")
+        ResNet_weights_stat
+        (
+            00: conv1.weight = 12.579392433166504
+            01: layer1.0.conv1.weight = 10.269349098205566
+            02: layer1.0.conv2.weight = 8.680017471313477
+            03: layer1.1.conv1.weight = 9.771225929260254
+            04: layer1.1.conv2.weight = 8.446762084960938
+            05: layer2.0.conv1.weight = 11.297880172729492
+            (...truncate)
+        )
 
         Args:
             func (Callable): reduction function
-            lw (bool, optional): If True, return a dict of results per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            lw (bool, optional): If True, return a ``StateDict`` of results per layer. Otherwise, return the result of the whole state dict. Defaults to False.
+            pattern (Union[None, str], optional): regex pattern to filter keys. Only keys that match the pattern will be kept. Defaults to None, which means no filtering.
 
         Returns:
-            Union[float, Dict]: result
+            Union[StateDict, Any]: If lw is True, return a ``StateDict`` of results per layer. Otherwise, return the result of the whole state dict.
         """
         if lw:
             pattern = Pattern(pattern)
@@ -761,7 +801,7 @@ class StateDict(OrderedDict):
         return func(self.flatten(pattern=pattern))
 
     def register_reduction(self, name: str, func: Callable):
-        """Register a reduction function to the state dict.
+        """All implemented reduction functions are registered in ``columns_group["all"]``. You can register your own reduction functions to ``columns_group["all"]`` by calling this method. See :meth:`describe` for more details.
 
         Args:
             name (str): name of the function
@@ -771,238 +811,240 @@ class StateDict(OrderedDict):
         columns_group["all"].append(name)
         setattr(self, name, lambda **kwargs: self.apply_reduction(func, **kwargs))
 
-    def max(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union[float, Dict]:
+    def max(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union["StateDict", Any]:
         """Compute the maximum of the state dict.
 
         Args:
             lw (bool, optional): If True, return a dict of maximums per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[float, Dict]: maximum
+            Union[StateDict, Any]: maximum
         """
         return self.apply_reduction(lambda x: x.max(**kwargs), lw=lw, pattern=pattern)
 
-    def min(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union[float, Dict]:
+    def min(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union["StateDict", Any]:
         """Compute the minimum of the state dict.
 
         Args:
             lw (bool, optional): If True, return a dict of minimums per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[float, Dict]: minimum
+            Union[StateDict, Any]: minimum
         """
         return self.apply_reduction(lambda x: x.min(**kwargs), lw=lw, pattern=pattern)
 
-    def no(self, *, lw: bool = False, pattern: Union[None, str] = None) -> Union[int, Dict]:
+    def no(self, *, lw: bool = False, pattern: Union[None, str] = None) -> Union["StateDict", int]:
         """If lw is True, return a dict of number ids per layer. Otherwise, return the number of tensors.
 
         Args:
             lw (bool, optional): If True, return a dict of numbers per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[int, Dict]: number of tensors
+            Union[StateDict, int]: If ``lw`` is True, return the index number of each layer. Otherwise, return the number of layers.
         """
         pattern = Pattern(pattern)
         if lw:
             return {k: i for i, k in enumerate(self.keys()) if pattern.match(k)}
         return len(self)
 
-    def name(self, *, lw: bool = False, pattern: Union[None, str] = None) -> Union[str, Dict]:
+    def name(self, *, lw: bool = False, pattern: Union[None, str] = None) -> Union["StateDict", str]:
         """Get the name of the state dict.
 
         Args:
             lw (bool, optional): If True, return a dict of names per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[str, Dict]: name
+            Union[StateDict, str]: If ``lw`` is True, return the name of each layer. Otherwise, return the name of the state dict.
         """
         pattern = Pattern(pattern)
         if lw:
             return {k: k for k in self.keys() if pattern.match(k)}
         return self._name
 
-    def numel(self, *, lw: bool = False, pattern: Union[None, str] = None) -> Union[int, Dict]:
+    def numel(self, *, lw: bool = False, pattern: Union[None, str] = None) -> Union["StateDict", int]:
         """Compute the number of elements of the state dict.
 
         Args:
             lw (bool, optional): If True, return a dict of number of elements per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[int, Dict]: number of elements
+            Union[StateDict, int]: If ``lw`` is True, return the number of elements of each layer. Otherwise, return the number of elements of the state dict.
         """
         return self.apply_reduction(lambda x: x.numel(), lw=lw, pattern=pattern)
 
-    def shape(self, *, lw: bool = False, pattern: Union[None, str] = None) -> Union[tuple, Dict]:
+    def shape(self, *, lw: bool = False, pattern: Union[None, str] = None) -> Union["StateDict", Any]:
         """Get the shape of the state dict.
 
         Args:
             lw (bool, optional): If True, return a dict of shapes per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[tuple, Dict]: shape
+            Union[StateDict, Any]: If ``lw`` is True, return the shape of each layer. Otherwise, return the shape of the state dict.
         """
         return self.apply_reduction(lambda x: x.shape, lw=lw, pattern=pattern)
 
-    def norm(self, p: float = 2, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs):
+    def norm(
+        self, p: float = 2, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs
+    ) -> ["StateDict", float]:
         """Compute the Lp norm of the state dict.
 
         Args:
             p (float, optional): p. Defaults to 2.
             lw (bool, optional): If True, return a dict of Lp norms per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[float, Dict]: Lp norm
+            Union[StateDict, float]: Lp norm
         """
         return self.apply_reduction(lambda x: x.norm(p, **kwargs), lw=lw, pattern=pattern)
 
-    def norm1(self, **kwargs) -> Union[float, Dict]:
+    def norm1(self, **kwargs) -> ["StateDict", float]:
         """Compute the L1 norm of the state dict.
 
         Args:
             lw (bool, optional): If True, return a dict of L1 norms per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[float, Dict]: L1 norm
+            Union["StateDict", float]: L1 norm
         """
         return self.norm(p=1, **kwargs)
 
-    def norm2(self, **kwargs) -> Union[float, Dict]:
+    def norm2(self, **kwargs) -> Union["StateDict", float]:
         """Compute the L2 norm of the state dict.
 
         Args:
             lw (bool, optional): If True, return a dict of L2 norms per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[float, OrderedDict]: L2 norm
+            Union["StateDict", float]: L2 norm
         """
         return self.norm(p=2, **kwargs)
 
-    def sum(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union[float, Dict]:
+    def sum(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union["StateDict", float]:
         """Compute the sum of the state dict.
 
         Args:
             lw (bool, optional): If True, return a dict of sums per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[float, Dict]: sum
+            Union["StateDict", float]: sum
         """
         return self.apply_reduction(lambda x: x.sum(**kwargs), lw=lw, pattern=pattern)
 
-    def norm1_mean(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union[float, Dict]:
+    def norm1_mean(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union["StateDict", float]:
         """Compute the mean of the L1 norm of the state dict.
 
         Args:
             lw (bool, optional): If True, return a dict of means per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[float, Dict]: mean of L1 norm
+            Union["StateDict", float]: mean of L1 norm
         """
         return self.apply_reduction(lambda x: x.norm(1, **kwargs) / x.numel(**kwargs), lw=lw, pattern=pattern)
 
-    def mean(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union[float, Dict]:
+    def mean(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union["StateDict", float]:
         """Compute the mean of the state dict.
 
         Args:
             lw (bool, optional): If True, return a dict of means per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[float, Dict]: mean
+            Union["StateDict", float]: mean
         """
         return self.apply_reduction(lambda x: x.mean(**kwargs), lw=lw, pattern=pattern)
 
-    def var(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union[float, Dict]:
+    def var(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union["StateDict", float]:
         """Compute the variance of the state dict.
 
         Args:
             lw (bool, optional): If True, return a dict of variances per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[float, Dict]: variance
+            Union["StateDict", float]: variance
         """
         return self.apply_reduction(lambda x: x.var(**kwargs), lw=lw, pattern=pattern)
 
-    def std(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union[float, Dict]:
+    def std(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union["StateDict", float]:
         """Compute the standard deviation of the state dict.
 
         Args:
             lw (bool, optional): If True, return a dict of standard deviations per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[float, Dict]: standard deviation
+            Union["StateDict", float]: standard deviation
         """
         return self.apply_reduction(lambda x: x.std(**kwargs), lw=lw, pattern=pattern)
 
-    def skew(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union[float, Dict]:
+    def skew(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union["StateDict", float]:
         """Compute the skewness of the state dict.
 
         Args:
             lw (bool, optional): If True, return a dict of skewnesses per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[float, Dict]: skewness
+            Union["StateDict", float]: skewness
         """
         return self.apply_reduction(lambda x: stats.skew(x, axis=None, **kwargs), lw=lw, pattern=pattern)
 
-    def kurtosis(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union[float, Dict]:
+    def kurtosis(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union["StateDict", float]:
         """Compute the kurtosis of the state dict.
 
         Args:
             lw (bool, optional): If True, return a dict of kurtosis per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[float, Dict]: kurtosis
+            Union["StateDict", float]: kurtosis
         """
         return self.apply_reduction(lambda x: stats.kurtosis(x, axis=None, **kwargs), lw=lw, pattern=pattern)
 
-    def abs_max(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union[float, Dict]:
+    def abs_max(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union["StateDict", float]:
         """Compute the absolute maximum of the state dict.
 
         Args:
             lw (bool, optional): If True, return a dict of absolute maximums per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[float, Dict]: absolute maximum
+            Union["StateDict", float]: absolute maximum
         """
         return self.apply_reduction(lambda x: x.abs().max(**kwargs), lw=lw, pattern=pattern)
 
-    def abs_min(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union[float, Dict]:
+    def abs_min(self, *, lw: bool = False, pattern: Union[None, str] = None, **kwargs) -> Union["StateDict", float]:
         """Compute the absolute minimum of the state dict.
 
         Args:
             lw (bool, optional): If True, return a dict of absolute minimums per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[float, Dict]: absolute minimum
+            Union["StateDict", float]: absolute minimum
         """
         return self.apply_reduction(lambda x: x.abs().min(**kwargs), lw=lw, pattern=pattern)
 
-    def value(self, *, lw: bool = False, pattern: Union[None, str] = None) -> Union[float, Dict]:
+    def value(self, *, lw: bool = False, pattern: Union[None, str] = None) -> Union["StateDict", float]:
         """Get the value of the state dict.
 
         Args:
             lw (bool, optional): If True, return a dict of values per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            pattern (Union[None, str], optional): pattern to filter keys. Defaults to None.
 
         Returns:
-            Union[float, Dict]: value
+            Union["StateDict", float]: value
         """
         if not lw:
             return str(self)
@@ -1012,32 +1054,63 @@ class StateDict(OrderedDict):
 
     def describe(
         self,
+        lw: bool = False,
         pattern: Union[None, str] = None,
         group: str = None,
-        lw: bool = False,
         display: bool = True,
         include_keys: Union[str, List[str]] = None,
         exlude_keys: Union[str, List[str]] = None,
-        additional_info: Dict[str, torch.Tensor] = None,
-    ) -> Union[None, Dict[str, Dict[str, float]]]:
-        """Display a summary of the state dict. The pre-defined groups are ``all`` and ``default``.
-        ``all``: ["name", "shape", "numel", "norm1", "norm1_mean", "norm2", "sum", "mean", "var", "std", "skew", "kurtosis", "max", "min", "abs_min", "abs_max"],
-        ``default``: ["name", "shape", "numel", "norm1", "norm1_mean", "norm2"]
+        additional_info: "StateDict" = None,
+    ) -> Union[None, "StateDict"]:
+        """This method collects statistics of the state dict. There are two ways to use this method. First, with ``display=True``, it will print the statistics of the state dict. This is useful for ``print`` or ``breakpoint()``. For example:
+
+        >>> state.describe()
+        [============================ Stats ResNet_weights ============================]
+        name            shape         numel     norm1         norm1_mean  norm2
+        0  ResNet_weights  (11689512,)  11689512  235774.53125  0.02017     113.108963
+        >>> state.describe(lw=True, pattern=".*conv.*")
+        [=========================== Stats ResNet_weights ===========================]
+            name                   shape              numel    norm1        norm2
+        0   conv1.weight              (64, 3, 7, 7)     9408    188.525146   2.438898
+        1   layer1.0.conv1.weight    (64, 64, 3, 3)    36864   1736.147461  11.318304
+        2   layer1.0.conv2.weight    (64, 64, 3, 3)    36864   1736.389282  11.336217
+        3   layer1.1.conv1.weight    (64, 64, 3, 3)    36864   1733.171997  11.316651
+        4   layer1.1.conv2.weight    (64, 64, 3, 3)    36864   1724.930786  11.236347
+        (...truncated)
+
+        The second way is to use ``display=False``. In this case, it will return a dict of statistics. This is useful for logging to 3rd party tools such as tensorboard and wandb. For example:
+
+        >>> state_logs = state.describe(display=False, include_keys=['norm1', 'norm2'])
+        >>> print(state_logs)
+        {'norm1': 235752.828125, 'norm2': 113.10881805419922}
+        >>> wandb.log({"iter": iter_num, **state_logs}, step=iter_num)
+
+
+        The ``columns_group`` defines the groups of statistics. You can use ``group`` to select a group of statistics. The default groups are:
+
+        .. code-block:: python
+
+            {
+                "all": ["name", "shape", "numel", "norm1", "norm1_mean", "norm2", "sum", "mean", "var", "std", "skew", "kurtosis", "max", "min", "abs_min", "abs_max"]
+                "default": ["name", "shape", "numel", "norm1", "norm1_mean", "norm2"]
+                "_light": ["name", "shape", "numel", "value"]
+                "custom": []
+            }
 
         Args:
-            display (bool, optional): If True, display the summary and return None. Defaults to True.
-            lw (bool, optional): If True, display lw stats. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
-            group (str, optional): Group of keys. Defaults to None. If None and no include_keys are provided,  use the ``default`` group.
-            include_keys (Union[str, List[str]], optional): Additional keys to include. Defaults to None.
-            exlude_keys (Union[str, List[str]], optional): Keys to exclude. Defaults to None.
-            additional_info (Dict[str, torch.Tensor], optional): additional info to display. It should be like {"norm1": {"layer1": value1, "layer2": value2}, "norm2": {...}} Defaults to None.
+            lw (bool, optional): If True, return a dict of statistics per layer. Defaults to False.
+            pattern (Union[None, str], optional): regex pattern to filter keys. Defaults to None.
+            group (str, optional): group name of statistics. The groups are defined in ``columns_group``. Defaults to None. If None, use ``columns_group["default"]``. If the state dict is light (i.e., not a dict of tensors), ``group`` will be ignored, and ``columns_group["_light"]`` will be used. See :meth:`register_reduction` for adding custom reduction functions.
+            display (bool, optional): If True, print the statistics. Otherwise, return a dict of statistics. Defaults to True.
+            include_keys (Union[str, List[str]], optional): keys to include. Keys must be in ``columns_group["all"]``. Defaults to None.
+            exlude_keys (Union[str, List[str]], optional): keys to exclude. Defaults to None.
+            additional_info (StateDict, optional): additional information to include. Defaults to None.
 
         Returns:
-            Union[None, Dict[str, Dict[str, float]]]: stats
+            Union[None, StateDict]: If ``display`` is False, return a dict of statistics. Otherwise, return None.
         """
         if self._light_dict:
-            group = "_light_dict"
+            group = "_light"
         if group is None:
             columns = []
             if include_keys is None:
@@ -1110,11 +1183,22 @@ class StateDict(OrderedDict):
         logy: bool = False,
         **kwargs,
     ):
-        """Plot histogram of the state dict.
+        """Plot histogram of the state dict. The file will be saved to cache directory. By default, the cache directory is ``~/cache_nnstat``. You can change the cache directory by :meth:`set_cache_dir`. For example:
+
+        .. code-block:: python
+
+            # plot the histogram
+            state.hist()
+            # plot the ecdf for each layer whose name contains "conv"
+            state.ecdf(lw=True, pattern=".*conv.*")
+            # change the cahce directory
+            nnstat.utils.set_cache_dir("my_cache_dir")
+            # plot the heatmap for each layer whose name contains "conv"
+            state.abs().heatmap(lw=True, pattern=".*conv.*")
 
         Args:
-            lw (bool, optional): If True, plot histograms per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            lw (bool, optional): If True,  histograms per layer will be plotted and multiple files will be saved. Defaults to False.
+            pattern (Union[None, str], optional): regex pattern to filter keys. Defaults to None.
             name (str, optional): name. Defaults to None.
             bins (int, optional): number of bins. Defaults to 100.
             logx (bool, optional): log scale of x axis. Defaults to False.
@@ -1143,11 +1227,11 @@ class StateDict(OrderedDict):
         logx: bool = False,
         logy: bool = False,
     ):
-        """Plot Empirical Cumulative Distribution Function (ECDF) of the state dict.
+        """Plot Empirical Cumulative Distribution Function (ECDF) of the state dict. The file will be saved to cache directory. By default, the cache directory is ``~/cache_nnstat``. You can change the cache directory by :meth:`set_cache_dir`.
 
         Args:
-            lw (bool, optional): If True, plot ECDFs per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            lw (bool, optional): If True,  histograms per layer will be plotted and multiple files will be saved. Defaults to False.
+            pattern (Union[None, str], optional): regex pattern to filter keys. Defaults to None.
             name (str, optional): name. Defaults to None.
             logx (bool, optional): log scale of x axis. Defaults to False.
             logy (bool, optional): log scale of y axis. Defaults to False.
@@ -1178,11 +1262,11 @@ class StateDict(OrderedDict):
         square: bool = False,
         **kwargs,
     ):
-        """Plot heatmap of the state dict.
+        """Plot heatmap of the state dict. The file will be saved to cache directory. By default, the cache directory is ``~/cache_nnstat``. You can change the cache directory by :meth:`set_cache_dir`.
 
         Args:
-            lw (bool, optional): If True, plot heatmaps per layer. Defaults to False.
-            pattern (Union[str, List[str]], optional): pattern to filter keys. Defaults to None.
+            lw (bool, optional): If True,  histograms per layer will be plotted and multiple files will be saved. Defaults to False.
+            pattern (Union[None, str], optional): regex pattern to filter keys. Defaults to None.
             name (str, optional): name. Defaults to None.
             vmin (float, optional): min v. Defaults to None.
             vmax (float, optional): max v. Defaults to None.

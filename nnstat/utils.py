@@ -1,4 +1,4 @@
-"""useful functions for nnstat"""
+"""Help functions for nnstat"""
 
 import logging
 import os
