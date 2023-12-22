@@ -1,0 +1,1390 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>nnstat &mdash; NNstat 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+  
+
+  
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+  <link rel="index" title="Index" href="../genindex.html" />
+  <link rel="search" title="Search" href="../search.html" />
+  <link rel="next" title="nnstat.functional" href="functional.html" />
+  <link rel="prev" title="Getting Started" href="../tutorials/getting_started.html" /> 
+
+  <!-- Preload the theme fonts -->
+
+<link rel="preload" href="../_static/fonts/FreightSans/freight-sans-book.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../_static/fonts/FreightSans/freight-sans-medium.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../_static/fonts/IBMPlexMono/IBMPlexMono-Medium.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../_static/fonts/FreightSans/freight-sans-bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../_static/fonts/FreightSans/freight-sans-medium-italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../_static/fonts/IBMPlexMono/IBMPlexMono-SemiBold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+<!-- Preload the katex fonts -->
+
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Main-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size4-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size3-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Caligraphic-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+    integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
+</head>
+
+
+<div class="container-fluid header-holder docs-header" id="header-holder">
+  <div class="container">
+    <div class="header-container">
+      <a class="header-logo" href="https://zhengzangw.github.io/nnstat/" aria-label="NNstat"></a>
+      <div class="main-menu">
+        <ul>
+          <li>
+            <a href="https://zhengzangw.github.io/nnstat/">Home</a>
+          </li>
+
+          <li class="active docs-active">
+            <div id="resourcesDropdownButton" data-toggle="resources-dropdown" class="resources-dropdown">
+              <a class="resource-option with-down-orange-arrow">
+                Docs
+              </a>
+              <div class="resources-dropdown-menu">
+                  <a class="doc-dropdown-option nav-dropdown-item active" href="https://zhengzangw.github.io/nnstat/">
+                  <span class="dropdown-title">NNstat</span>
+                  <p></p>
+                </a>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="https://github.com/zhengzangw/nnstat/">GitHub</a>
+          </li>
+        </ul>
+      </div>
+
+      <a class="main-menu-open-button" href="#" data-behavior="open-mobile-menu"></a>
+    </div>
+  </div>
+</div>
+
+<body class="sphinx-template-body">
+
+   
+
+  
+
+  <div class="table-of-contents-link-wrapper">
+    <span>Table of Contents</span>
+    <a href="#" class="toggle-table-of-contents" data-behavior="toggle-table-of-contents"></a>
+  </div>
+
+  <nav data-toggle="sphinx-template-nav-shift" class="sphinx-template-left-menu" id="sphinx-template-left-menu">
+    <div class="sphinx-template-side-scroll">
+      <div class="sphinx-template-menu sphinx-template-menu-vertical" data-spy="affix" role="navigation"
+        aria-label="main navigation">
+        <div class="sphinx-template-left-menu-search">
+          
+
+          
+          
+          
+          <div class="version">
+            0.0.1
+          </div>
+          
+          
+
+          
+
+
+<div role="search">
+  <form id="rtd-search-form" class="sphinx-template-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search Docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        
+        
+        
+        
+        
+        <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/getting_started.html">Getting Started</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">nnstat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functional.html">nnstat.functional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="accum.html">nnstat.accum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optim.html">nnstat.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">nnstat.utils</a></li>
+</ul>
+
+        
+        
+      </div>
+    </div>
+  </nav>
+
+  <div class="sphinx-template-container">
+    <div class="sphinx-template-page-level-bar" id="sphinx-template-page-level-bar">
+      <div class="sphinx-template-breadcrumbs-wrapper">
+        <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="sphinx-template-breadcrumbs">
+      <li><a href="../index.html" class="fa fa-large fa-home">Docs</a> &gt;</li>
+      <li>nnstat</li>
+      <li class="sphinx-template-breadcrumbs-aside">
+              <a href="https://github.com/zhengzangw/nnstat/blob/main/docs/source/api/nnstat.rst" class="fa fa-large fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+</div>
+      </div>
+
+      <div class="sphinx-template-shortcuts-wrapper" id="sphinx-template-shortcuts-wrapper">
+        Shortcuts
+      </div>
+    </div>
+
+    <section data-toggle="sphinx-template-nav-shift" id="sphinx-template-content-wrap" class="sphinx-template-content-wrap">
+      <div class="sphinx-template-content-left">
+        
+          <div class="rst-content">
+            
+            <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
+              <article itemprop="articleBody" id="sphinx-template-article" class="sphinx-template-article">
+                
+  <section id="module-nnstat.core">
+<span id="nnstat"></span><span id="api-nnstat"></span><h1>nnstat<a class="headerlink" href="#module-nnstat.core" title="Link to this heading">¶</a></h1>
+<p>See <a class="reference internal" href="../tutorials/getting_started.html"><span class="doc">Getting Started</span></a> for basic usage.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="nnstat.core.from_state_dict">
+<span class="sig-prename descclassname"><span class="pre">nnstat.core.</span></span><span class="sig-name descname"><span class="pre">from_state_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw_state_dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L85-L119"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.from_state_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Create a StateDict from a raw state dict.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="n">nnstat</span><span class="o">.</span><span class="n">from_state_dict</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">())</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>raw_state_dict</strong> (<em>Dict</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.1)"><em>torch.Tensor</em></a><em>]</em>) – raw state dict</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – regex pattern to filter keys. Only keys that match the pattern will be kept. Defaults to None, which means no filtering.</p></li>
+<li><p><strong>clone</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">clone=False</span></code> means that the tensors in returned state dict shares the same memory with the one in the model except being detached. Use <code class="docutils literal notranslate"><span class="pre">clone=True</span></code> to make a snapshot of the state dict. Use <code class="docutils literal notranslate"><span class="pre">device=&quot;cpu&quot;</span></code> to save GPU memory. When <code class="docutils literal notranslate"><span class="pre">copy=False</span></code>, you <abbr>cannot</abbr> set <code class="docutils literal notranslate"><span class="pre">device</span></code> and <code class="docutils literal notranslate"><span class="pre">dtype</span></code>.. Defaults to False.</p></li>
+<li><p><strong>device</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – device used for moving. Defaults to None, which means no moving. This cannot be used together with <code class="docutils literal notranslate"><span class="pre">clone=False</span></code>.</p></li>
+<li><p><strong>dtype</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="(in PyTorch v2.1)"><em>torch.dtype</em></a><em>, </em><em>optional</em>) – dtype used for casting. Defaults to None, which means no casting. This cannot be used together with <code class="docutils literal notranslate"><span class="pre">clone=False</span></code>.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – name of the state dict. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>StateDict</em> – state dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nnstat.core.from_weight">
+<span class="sig-prename descclassname"><span class="pre">nnstat.core.</span></span><span class="sig-name descname"><span class="pre">from_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requires_grad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L122-L161"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.from_weight" title="Link to this definition">¶</a></dt>
+<dd><p>Create a StateDict containing weights (parameters) from PyTorch a model.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="n">nnstat</span><span class="o">.</span><span class="n">from_weight</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>nn.Module</em>) – model</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – regex pattern to filter keys. Only keys that match the pattern will be kept. Defaults to None, which means no filtering.</p></li>
+<li><p><strong>requires_grad</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – only keep parameters with <code class="docutils literal notranslate"><span class="pre">requires_grad=True</span></code>. Defaults to False.</p></li>
+<li><p><strong>clone</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">clone=False</span></code> means that the tensors in returned state dict shares the same memory with the one in the model except being detached. Use <code class="docutils literal notranslate"><span class="pre">clone=True</span></code> to make a snapshot of the state dict. Use <code class="docutils literal notranslate"><span class="pre">device=&quot;cpu&quot;</span></code> to save GPU memory. When <code class="docutils literal notranslate"><span class="pre">copy=False</span></code>, you <abbr>cannot</abbr> set <code class="docutils literal notranslate"><span class="pre">device</span></code> and <code class="docutils literal notranslate"><span class="pre">dtype</span></code>.. Defaults to False.</p></li>
+<li><p><strong>device</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – device used for moving. Defaults to None, which means no moving. This cannot be used together with <code class="docutils literal notranslate"><span class="pre">clone=False</span></code>.</p></li>
+<li><p><strong>dtype</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="(in PyTorch v2.1)"><em>torch.dtype</em></a><em>, </em><em>optional</em>) – dtype used for casting. Defaults to None, which means no casting. This cannot be used together with <code class="docutils literal notranslate"><span class="pre">clone=False</span></code>.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – name of the state dict. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>StateDict</em> – state dict of weights</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nnstat.core.from_grad">
+<span class="sig-prename descclassname"><span class="pre">nnstat.core.</span></span><span class="sig-name descname"><span class="pre">from_grad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L164-L202"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.from_grad" title="Link to this definition">¶</a></dt>
+<dd><p>Create a StateDict containing gradients from PyTorch a model.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="n">nnstat</span><span class="o">.</span><span class="n">from_grad</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>nn.Module</em>) – model</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – regex pattern to filter keys. Only keys that match the pattern will be kept. Defaults to None, which means no filtering.</p></li>
+<li><p><strong>clone</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">clone=False</span></code> means that the tensors in returned state dict shares the same memory with the one in the model except being detached. Use <code class="docutils literal notranslate"><span class="pre">clone=True</span></code> to make a snapshot of the state dict. Use <code class="docutils literal notranslate"><span class="pre">device=&quot;cpu&quot;</span></code> to save GPU memory. When <code class="docutils literal notranslate"><span class="pre">copy=False</span></code>, you <abbr>cannot</abbr> set <code class="docutils literal notranslate"><span class="pre">device</span></code> and <code class="docutils literal notranslate"><span class="pre">dtype</span></code>.. Defaults to False.</p></li>
+<li><p><strong>device</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – device used for moving. Defaults to None, which means no moving. This cannot be used together with <code class="docutils literal notranslate"><span class="pre">clone=False</span></code>.</p></li>
+<li><p><strong>dtype</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="(in PyTorch v2.1)"><em>torch.dtype</em></a><em>, </em><em>optional</em>) – dtype used for casting. Defaults to None, which means no casting. This cannot be used together with <code class="docutils literal notranslate"><span class="pre">clone=False</span></code>.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – name of the state dict. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>StateDict</em> – state dict of gradients</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nnstat.core.from_optimizer_state">
+<span class="sig-prename descclassname"><span class="pre">nnstat.core.</span></span><span class="sig-name descname"><span class="pre">from_optimizer_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L205-L245"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.from_optimizer_state" title="Link to this definition">¶</a></dt>
+<dd><p>Create a StateDict containing optimizer states from a model and an optimizer.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="n">nnstat</span><span class="o">.</span><span class="n">from_optimizer_state</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">optimizer_key</span><span class="o">=</span><span class="s2">&quot;exp_avg&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>nn.Module</em>) – model</p></li>
+<li><p><strong>optimizer</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/optim.html#torch.optim.Optimizer" title="(in PyTorch v2.1)"><em>torch.optim.Optimizer</em></a>) – optimizer</p></li>
+<li><p><strong>optimizer_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – key of optimizer state. Defaults to None. For adam, <code class="docutils literal notranslate"><span class="pre">&quot;exp_avg&quot;</span></code> can be used.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – regex pattern to filter keys. Only keys that match the pattern will be kept. Defaults to None, which means no filtering.</p></li>
+<li><p><strong>clone</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">clone=False</span></code> means that the tensors in returned state dict shares the same memory with the one in the model except being detached. Use <code class="docutils literal notranslate"><span class="pre">clone=True</span></code> to make a snapshot of the state dict. Use <code class="docutils literal notranslate"><span class="pre">device=&quot;cpu&quot;</span></code> to save GPU memory. When <code class="docutils literal notranslate"><span class="pre">copy=False</span></code>, you <abbr>cannot</abbr> set <code class="docutils literal notranslate"><span class="pre">device</span></code> and <code class="docutils literal notranslate"><span class="pre">dtype</span></code>.. Defaults to False.</p></li>
+<li><p><strong>device</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – device used for moving. Defaults to None, which means no moving. This cannot be used together with <code class="docutils literal notranslate"><span class="pre">clone=False</span></code>.</p></li>
+<li><p><strong>dtype</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="(in PyTorch v2.1)"><em>torch.dtype</em></a><em>, </em><em>optional</em>) – dtype used for casting. Defaults to None, which means no casting. This cannot be used together with <code class="docutils literal notranslate"><span class="pre">clone=False</span></code>.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – name of the state dict. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>StateDict</em> – state dict of optimizer states</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nnstat.core.from_together">
+<span class="sig-prename descclassname"><span class="pre">nnstat.core.</span></span><span class="sig-name descname"><span class="pre">from_together</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clone</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L248-L283"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.from_together" title="Link to this definition">¶</a></dt>
+<dd><p>Create a StateDict containing weights, gradients, and optimizer states from a model and an optimizer.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="n">nnstat</span><span class="o">.</span><span class="n">from_together</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">optimizer_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;exp_avg&quot;</span><span class="p">,</span> <span class="s2">&quot;exp_avg_sq&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>nn.Module</em>) – model</p></li>
+<li><p><strong>optimizer</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/optim.html#torch.optim.Optimizer" title="(in PyTorch v2.1)"><em>torch.optim.Optimizer</em></a>) – optimizer</p></li>
+<li><p><strong>optimizer_keys</strong> (<em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – keys of optimizer states. Defaults to None. For adam, <code class="docutils literal notranslate"><span class="pre">[&quot;exp_avg&quot;,</span> <span class="pre">&quot;exp_avg_sq&quot;]</span></code> can be used.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – regex pattern to filter keys. Only keys that match the pattern will be kept. Defaults to None, which means no filtering.</p></li>
+<li><p><strong>clone</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">clone=False</span></code> means that the tensors in returned state dict shares the same memory with the one in the model except being detached. Use <code class="docutils literal notranslate"><span class="pre">clone=True</span></code> to make a snapshot of the state dict. Use <code class="docutils literal notranslate"><span class="pre">device=&quot;cpu&quot;</span></code> to save GPU memory. When <code class="docutils literal notranslate"><span class="pre">copy=False</span></code>, you <abbr>cannot</abbr> set <code class="docutils literal notranslate"><span class="pre">device</span></code> and <code class="docutils literal notranslate"><span class="pre">dtype</span></code>.. Defaults to False.</p></li>
+<li><p><strong>device</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – device used for moving. Defaults to None, which means no moving. This cannot be used together with <code class="docutils literal notranslate"><span class="pre">clone=False</span></code>.</p></li>
+<li><p><strong>dtype</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="(in PyTorch v2.1)"><em>torch.dtype</em></a><em>, </em><em>optional</em>) – dtype used for casting. Defaults to None, which means no casting. This cannot be used together with <code class="docutils literal notranslate"><span class="pre">clone=False</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>tuple[StateDict, StateDict, List[StateDict]]</em> – state dict of weights, gradients, and optimizer states</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nnstat.core.from_activation">
+<span class="sig-prename descclassname"><span class="pre">nnstat.core.</span></span><span class="sig-name descname"><span class="pre">from_activation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L321-L336"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.from_activation" title="Link to this definition">¶</a></dt>
+<dd><p>Register forward hooks to a model. The state dict of activations will be stored in the <code class="docutils literal notranslate"><span class="pre">state_dict</span></code> attribute of the returned object. After a forward pass, the state dict will be updated.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="n">nnstat</span><span class="o">.</span><span class="n">from_activation</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="c1"># state is empty</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># forward pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="c1"># state is updated</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>nn.Module</em>) – model</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>ForwardHook</em> – class for wrapping forward hooks and has a <code class="docutils literal notranslate"><span class="pre">state_dict</span></code> attribute</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nnstat.core.from_activation_grad">
+<span class="sig-prename descclassname"><span class="pre">nnstat.core.</span></span><span class="sig-name descname"><span class="pre">from_activation_grad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L361-L376"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.from_activation_grad" title="Link to this definition">¶</a></dt>
+<dd><p>Register backward hooks to a model. The state dict of gradients of activations will be stored in the <code class="docutils literal notranslate"><span class="pre">state_dict</span></code> attribute of the returned object. After a backward pass, the state dict will be updated.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="n">nnstat</span><span class="o">.</span><span class="n">from_activation_grad</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="c1"># state is empty</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span> <span class="c1"># backward pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="c1"># state is updated</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<em>nn.Module</em>) – model</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>BackwardHook</em> – class for wrapping backward hooks and has a <code class="docutils literal notranslate"><span class="pre">state_dict</span></code> attribute</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="nnstat.core.StateDict">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">nnstat.core.</span></span><span class="sig-name descname"><span class="pre">StateDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L382-L1286"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">StateDict</span></code> is the main class of nnstat. The keys are supposed to be the names of PyTorch modules. The values can be (detached) tensors or other objects. It provides many useful functions to analyze the state dict and supports basic math operations. Methods of <code class="docutils literal notranslate"><span class="pre">StateDict</span></code> are divided into three categories: update, reduction, and visualization.</p>
+<ul class="simple">
+<li><p><strong>Update functions</strong> will return a state dict with the same keys and shapes as the input state dict. More details can be found in apply method <a class="reference internal" href="#nnstat.core.StateDict.apply" title="nnstat.core.StateDict.apply"><code class="xref py py-meth docutils literal notranslate"><span class="pre">apply()</span></code></a>. Examples include <a class="reference internal" href="#nnstat.core.StateDict.abs" title="nnstat.core.StateDict.abs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">abs()</span></code></a>, <a class="reference internal" href="#nnstat.core.StateDict.clip" title="nnstat.core.StateDict.clip"><code class="xref py py-meth docutils literal notranslate"><span class="pre">clip()</span></code></a>, <a class="reference internal" href="#nnstat.core.StateDict.sign" title="nnstat.core.StateDict.sign"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sign()</span></code></a>, etc.</p></li>
+<li><p><strong>Reduction functions</strong> will return a scalar or a dict of scalars. More details can be found in apply_reduction method <a class="reference internal" href="#nnstat.core.StateDict.apply_reduction" title="nnstat.core.StateDict.apply_reduction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">apply_reduction()</span></code></a>. Examples include <a class="reference internal" href="#nnstat.core.StateDict.norm" title="nnstat.core.StateDict.norm"><code class="xref py py-meth docutils literal notranslate"><span class="pre">norm()</span></code></a>, <a class="reference internal" href="#nnstat.core.StateDict.mean" title="nnstat.core.StateDict.mean"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mean()</span></code></a>, <a class="reference internal" href="#nnstat.core.StateDict.var" title="nnstat.core.StateDict.var"><code class="xref py py-meth docutils literal notranslate"><span class="pre">var()</span></code></a>, etc. All reduction functions support a <code class="docutils literal notranslate"><span class="pre">lw</span></code> argument, which means “layer-wise” applying reduction, and a <code class="docutils literal notranslate"><span class="pre">pattern</span></code> argument to filter keys. Otherwise, the reduction will be applied to the whole state dict.</p></li>
+<li><p><strong>Visualization functions</strong> will give a summary of the state dict. This includes <a class="reference internal" href="#nnstat.core.StateDict.describe" title="nnstat.core.StateDict.describe"><code class="xref py py-meth docutils literal notranslate"><span class="pre">describe()</span></code></a>, <a class="reference internal" href="#nnstat.core.StateDict.hist" title="nnstat.core.StateDict.hist"><code class="xref py py-meth docutils literal notranslate"><span class="pre">hist()</span></code></a>, <a class="reference internal" href="#nnstat.core.StateDict.ecdf" title="nnstat.core.StateDict.ecdf"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ecdf()</span></code></a>, and <a class="reference internal" href="#nnstat.core.StateDict.heatmap" title="nnstat.core.StateDict.heatmap"><code class="xref py py-meth docutils literal notranslate"><span class="pre">heatmap()</span></code></a>.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the state dict. This is used for display.</p></li>
+<li><p><strong>_is_tensor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – whether all values are tensors</p></li>
+<li><p><strong>_light_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – a light dict means that all values are scalars (or strings). A light dict is typically a result of reduction functions. Light dicts have different display styles.</p></li>
+<li><p><strong>device</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – device for moving tensors. If None, the current device is used.</p></li>
+<li><p><strong>dtype</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="(in PyTorch v2.1)"><em>torch.dtype</em></a>) – dtype for casting tensors. If None, the current dtype is used.</p></li>
+<li><p><strong>_flattened</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.1)"><em>torch.Tensor</em></a><em>, </em><em>List</em><em>]</em>) – holder for the flattened tensor. This is used for lazy evaluation.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L401-L415"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.__init__" title="Link to this definition">¶</a></dt>
+<dd><p><code class="docutils literal notranslate"><span class="pre">StateDict</span></code> is a subclass of <code class="docutils literal notranslate"><span class="pre">OrderedDict</span></code>. Avoid calling class <code class="docutils literal notranslate"><span class="pre">__init__</span></code> directly. Instead, create StateDict using the factory functions such as <a class="reference internal" href="#nnstat.core.from_state_dict" title="nnstat.core.from_state_dict"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_state_dict()</span></code></a>, <a class="reference internal" href="#nnstat.core.from_weight" title="nnstat.core.from_weight"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_weight()</span></code></a>, <a class="reference internal" href="#nnstat.core.from_grad" title="nnstat.core.from_grad"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_grad()</span></code></a>, <a class="reference internal" href="#nnstat.core.from_optimizer_state" title="nnstat.core.from_optimizer_state"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_optimizer_state()</span></code></a>, <a class="reference internal" href="#nnstat.core.from_together" title="nnstat.core.from_together"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_together()</span></code></a>, <a class="reference internal" href="#nnstat.core.from_activation" title="nnstat.core.from_activation"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_activation()</span></code></a>, and <a class="reference internal" href="#nnstat.core.from_activation_grad" title="nnstat.core.from_activation_grad"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_activation_grad()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – name of the state dict. Defaults to None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.clone">
+<span class="sig-name descname"><span class="pre">clone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L434-L451"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.clone" title="Link to this definition">¶</a></dt>
+<dd><p>Make a clone of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>device</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – device. None means the current device. Defaults to None.</p></li>
+<li><p><strong>dtype</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="(in PyTorch v2.1)"><em>torch.dtype</em></a><em>, </em><em>optional</em>) – dtype. None means the current dtype. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>StateDict</em> – cloned state dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.to">
+<span class="sig-name descname"><span class="pre">to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L453-L468"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.to" title="Link to this definition">¶</a></dt>
+<dd><p>Move the state dict to a device and cast to a dtype inplacely.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>device</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – device. None means the current device. Defaults to None.</p></li>
+<li><p><strong>dtype</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="(in PyTorch v2.1)"><em>torch.dtype</em></a><em>, </em><em>optional</em>) – dtype. None means the current dtype. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>StateDict</em> – self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.set_name">
+<span class="sig-name descname"><span class="pre">set_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L497-L508"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.set_name" title="Link to this definition">¶</a></dt>
+<dd><p>Set the name of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>StateDict</em> – self</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.at">
+<span class="sig-name descname"><span class="pre">at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L510-L519"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.at" title="Link to this definition">¶</a></dt>
+<dd><p>Get the value at a given index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – index</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[torch.Tensor, Any]</em> – value at the index</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.state_dict">
+<span class="sig-name descname"><span class="pre">state_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L521-L527"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.state_dict" title="Link to this definition">¶</a></dt>
+<dd><p>Return a state dict of type dict, which can be loaded by <code class="docutils literal notranslate"><span class="pre">torch.load</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>Union[dict[str, torch.Tensor], dict[str, Any]]</em> – state dict of type <code class="docutils literal notranslate"><span class="pre">dict</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L529-L535"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.save" title="Link to this definition">¶</a></dt>
+<dd><p>Save a state dict to a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – path to file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.is_compatible">
+<span class="sig-name descname"><span class="pre">is_compatible</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L537-L546"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.is_compatible" title="Link to this definition">¶</a></dt>
+<dd><p>Check if two state dicts are compatible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#nnstat.core.StateDict" title="nnstat.core.StateDict"><em>StateDict</em></a>) – another state dict</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>bool</em> – True if compatible</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.flatten">
+<span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lazy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L548-L577"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.flatten" title="Link to this definition">¶</a></dt>
+<dd><p>Flatten the state dict.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Reduction functions on the whole state dict are implemented on the flattened tensor. By default, the flattened tensor is cached. If you want to use a different pattern, you should set <code class="docutils literal notranslate"><span class="pre">lazy=False</span></code>.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lazy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return the cached flattened tensor. Defaults to True. This cannot be used together with pattern.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>torch.Tensor</em> – If the value is a tensor, a flattened tensor will be returned. If the value is not a tensor, a list of values will be converted to a tensor and returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L581-L596"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.apply" title="Link to this definition">¶</a></dt>
+<dd><p>This method is used to construct update functions. The update method applys element-wise operations to each tensor in the state dict, and returns a new state dict with the same keys and shapes as the input state dict. For example, we can use the following code to compute the adam update:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">nnstat</span><span class="o">.</span><span class="n">from_optimizer_state</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">optimizer_key</span><span class="o">=</span><span class="s2">&quot;exp_avg&quot;</span><span class="p">)</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">nnstat</span><span class="o">.</span><span class="n">from_optimizer_state</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">optimizer_key</span><span class="o">=</span><span class="s2">&quot;exp_avg_sq&quot;</span><span class="p">)</span>
+<span class="n">update</span> <span class="o">=</span> <span class="n">m</span> <span class="o">/</span> <span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span> <span class="o">+</span> <span class="mf">1e-8</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>func</strong> (<em>Callable</em>) – function</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>StateDict</em> – state dict with function applied</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.apply_">
+<span class="sig-name descname"><span class="pre">apply_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L598-L602"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.apply_" title="Link to this definition">¶</a></dt>
+<dd><p>Inplace version of <a class="reference internal" href="#nnstat.core.StateDict.apply" title="nnstat.core.StateDict.apply"><code class="xref py py-meth docutils literal notranslate"><span class="pre">apply()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.filter">
+<span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L604-L614"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.filter" title="Link to this definition">¶</a></dt>
+<dd><p>Filter the state dict by a pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em>) – regex pattern to filter keys. Only keys that match the pattern will be kept. Defaults to None, which means no filtering.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>StateDict</em> – filtered state dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.sqrt">
+<span class="sig-name descname"><span class="pre">sqrt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L658-L660"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.sqrt" title="Link to this definition">¶</a></dt>
+<dd><p>element-wise square root</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.sqrt_">
+<span class="sig-name descname"><span class="pre">sqrt_</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L662-L664"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.sqrt_" title="Link to this definition">¶</a></dt>
+<dd><p>Inplace version of <a class="reference internal" href="#nnstat.core.StateDict.sqrt" title="nnstat.core.StateDict.sqrt"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sqrt()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.abs">
+<span class="sig-name descname"><span class="pre">abs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L666-L671"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.abs" title="Link to this definition">¶</a></dt>
+<dd><p>element-wise absolute value</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.abs_">
+<span class="sig-name descname"><span class="pre">abs_</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L673-L679"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.abs_" title="Link to this definition">¶</a></dt>
+<dd><p>Inplace version of <a class="reference internal" href="#nnstat.core.StateDict.abs" title="nnstat.core.StateDict.abs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">abs()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.zeros">
+<span class="sig-name descname"><span class="pre">zeros</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L681-L686"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.zeros" title="Link to this definition">¶</a></dt>
+<dd><p>Return a state dict of zeros with the same keys and shapes as the input state dict.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.zeros_">
+<span class="sig-name descname"><span class="pre">zeros_</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L688-L694"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.zeros_" title="Link to this definition">¶</a></dt>
+<dd><p>Inplace version of <code class="xref py py-meth docutils literal notranslate"><span class="pre">zero()</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.ones">
+<span class="sig-name descname"><span class="pre">ones</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L696-L701"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.ones" title="Link to this definition">¶</a></dt>
+<dd><p>Return a state dict of ones with the same keys and shapes as the input state dict.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.ones_">
+<span class="sig-name descname"><span class="pre">ones_</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L703-L709"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.ones_" title="Link to this definition">¶</a></dt>
+<dd><p>Inplace version of <a class="reference internal" href="#nnstat.core.StateDict.ones" title="nnstat.core.StateDict.ones"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ones()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.sign">
+<span class="sig-name descname"><span class="pre">sign</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L711-L716"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.sign" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the sign of the state dict.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.sign_">
+<span class="sig-name descname"><span class="pre">sign_</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L718-L724"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.sign_" title="Link to this definition">¶</a></dt>
+<dd><p>Inplace version of <a class="reference internal" href="#nnstat.core.StateDict.sign" title="nnstat.core.StateDict.sign"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sign()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.clip">
+<span class="sig-name descname"><span class="pre">clip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L726-L739"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.clip" title="Link to this definition">¶</a></dt>
+<dd><p>Clip the state dict inplace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a><em>, </em><em>optional</em>) – min value. Defaults to None.</p></li>
+<li><p><strong>max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a><em>, </em><em>optional</em>) – max value. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>StateDict</em> – clipped state dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.clip_">
+<span class="sig-name descname"><span class="pre">clip_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L741-L747"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.clip_" title="Link to this definition">¶</a></dt>
+<dd><p>Inplace version of <a class="reference internal" href="#nnstat.core.StateDict.clip" title="nnstat.core.StateDict.clip"><code class="xref py py-meth docutils literal notranslate"><span class="pre">clip()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.apply_reduction">
+<span class="sig-name descname"><span class="pre">apply_reduction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L751-L800"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.apply_reduction" title="Link to this definition">¶</a></dt>
+<dd><p>Apply a reduction function to the state dict, or to each layer of the state dict. For example:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">state</span> <span class="o">=</span> <span class="n">nnstat</span><span class="o">.</span><span class="n">from_weight</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="c1"># a resnet model</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">tensor(98.5264)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">ResNet_weights_stat</span>
+<span class="go">(</span>
+<span class="go">    01: bn1.weight = 2.280656576156616</span>
+<span class="go">    02: bn1.bias = 2.7802467346191406</span>
+<span class="go">    03: layer1.0.conv1.weight = 10.269349098205566</span>
+<span class="go">    04: layer1.0.bn1.weight = 2.8918473720550537</span>
+<span class="go">    05: layer1.0.bn1.bias = 1.6855857372283936</span>
+<span class="go">    (...truncate)</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">&quot;.*conv.*&quot;</span><span class="p">)</span>
+<span class="go">ResNet_weights_stat</span>
+<span class="go">(</span>
+<span class="go">    00: conv1.weight = 12.579392433166504</span>
+<span class="go">    01: layer1.0.conv1.weight = 10.269349098205566</span>
+<span class="go">    02: layer1.0.conv2.weight = 8.680017471313477</span>
+<span class="go">    03: layer1.1.conv1.weight = 9.771225929260254</span>
+<span class="go">    04: layer1.1.conv2.weight = 8.446762084960938</span>
+<span class="go">    05: layer2.0.conv1.weight = 11.297880172729492</span>
+<span class="go">    (...truncate)</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> (<em>Callable</em>) – reduction function</p></li>
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a <code class="docutils literal notranslate"><span class="pre">StateDict</span></code> of results per layer. Otherwise, return the result of the whole state dict. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – regex pattern to filter keys. Only keys that match the pattern will be kept. Defaults to None, which means no filtering.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[StateDict, Any]</em> – If lw is True, return a <code class="docutils literal notranslate"><span class="pre">StateDict</span></code> of results per layer. Otherwise, return the result of the whole state dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.register_reduction">
+<span class="sig-name descname"><span class="pre">register_reduction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L802-L811"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.register_reduction" title="Link to this definition">¶</a></dt>
+<dd><p>All implemented reduction functions are registered in <code class="docutils literal notranslate"><span class="pre">columns_group[&quot;all&quot;]</span></code>. You can register your own reduction functions to <code class="docutils literal notranslate"><span class="pre">columns_group[&quot;all&quot;]</span></code> by calling this method. See <a class="reference internal" href="#nnstat.core.StateDict.describe" title="nnstat.core.StateDict.describe"><code class="xref py py-meth docutils literal notranslate"><span class="pre">describe()</span></code></a> for more details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – name of the function</p></li>
+<li><p><strong>func</strong> (<em>Callable</em>) – reduction function</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.max">
+<span class="sig-name descname"><span class="pre">max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L813-L823"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.max" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the maximum of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of maximums per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[StateDict, Any]</em> – maximum</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.min">
+<span class="sig-name descname"><span class="pre">min</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L825-L835"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.min" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the minimum of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of minimums per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[StateDict, Any]</em> – minimum</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.no">
+<span class="sig-name descname"><span class="pre">no</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L837-L850"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.no" title="Link to this definition">¶</a></dt>
+<dd><p>If lw is True, return a dict of number ids per layer. Otherwise, return the number of tensors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of numbers per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[StateDict, int]</em> – If <code class="docutils literal notranslate"><span class="pre">lw</span></code> is True, return the index number of each layer. Otherwise, return the number of layers.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L852-L865"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.name" title="Link to this definition">¶</a></dt>
+<dd><p>Get the name of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of names per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[StateDict, str]</em> – If <code class="docutils literal notranslate"><span class="pre">lw</span></code> is True, return the name of each layer. Otherwise, return the name of the state dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.numel">
+<span class="sig-name descname"><span class="pre">numel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L867-L877"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.numel" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the number of elements of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of number of elements per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[StateDict, int]</em> – If <code class="docutils literal notranslate"><span class="pre">lw</span></code> is True, return the number of elements of each layer. Otherwise, return the number of elements of the state dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.shape">
+<span class="sig-name descname"><span class="pre">shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L879-L889"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.shape" title="Link to this definition">¶</a></dt>
+<dd><p>Get the shape of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of shapes per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[StateDict, Any]</em> – If <code class="docutils literal notranslate"><span class="pre">lw</span></code> is True, return the shape of each layer. Otherwise, return the shape of the state dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.norm">
+<span class="sig-name descname"><span class="pre">norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L891-L904"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.norm" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the Lp norm of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>p</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a><em>, </em><em>optional</em>) – <ol class="loweralpha simple" start="16">
+<li><p>Defaults to 2.</p></li>
+</ol>
+</p></li>
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of Lp norms per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[StateDict, float]</em> – Lp norm</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.norm1">
+<span class="sig-name descname"><span class="pre">norm1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L906-L916"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.norm1" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the L1 norm of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of L1 norms per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[“StateDict”, float]</em> – L1 norm</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.norm2">
+<span class="sig-name descname"><span class="pre">norm2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L918-L928"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.norm2" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the L2 norm of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of L2 norms per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[“StateDict”, float]</em> – L2 norm</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.sum">
+<span class="sig-name descname"><span class="pre">sum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L930-L940"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.sum" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the sum of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of sums per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[“StateDict”, float]</em> – sum</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.norm1_mean">
+<span class="sig-name descname"><span class="pre">norm1_mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L942-L952"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.norm1_mean" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the mean of the L1 norm of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of means per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[“StateDict”, float]</em> – mean of L1 norm</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.mean">
+<span class="sig-name descname"><span class="pre">mean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L954-L964"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.mean" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the mean of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of means per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[“StateDict”, float]</em> – mean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.var">
+<span class="sig-name descname"><span class="pre">var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L966-L976"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.var" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the variance of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of variances per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[“StateDict”, float]</em> – variance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.std">
+<span class="sig-name descname"><span class="pre">std</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L978-L988"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.std" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the standard deviation of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of standard deviations per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[“StateDict”, float]</em> – standard deviation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.skew">
+<span class="sig-name descname"><span class="pre">skew</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L990-L1000"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.skew" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the skewness of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of skewnesses per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[“StateDict”, float]</em> – skewness</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.kurtosis">
+<span class="sig-name descname"><span class="pre">kurtosis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L1002-L1012"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.kurtosis" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the kurtosis of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of kurtosis per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[“StateDict”, float]</em> – kurtosis</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.abs_max">
+<span class="sig-name descname"><span class="pre">abs_max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L1014-L1024"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.abs_max" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the absolute maximum of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of absolute maximums per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[“StateDict”, float]</em> – absolute maximum</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.abs_min">
+<span class="sig-name descname"><span class="pre">abs_min</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L1026-L1036"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.abs_min" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the absolute minimum of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of absolute minimums per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[“StateDict”, float]</em> – absolute minimum</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.value">
+<span class="sig-name descname"><span class="pre">value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L1038-L1050"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.value" title="Link to this definition">¶</a></dt>
+<dd><p>Get the value of the state dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of values per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – pattern to filter keys. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[“StateDict”, float]</em> – value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.describe">
+<span class="sig-name descname"><span class="pre">describe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exlude_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">additional_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L1054-L1171"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.describe" title="Link to this definition">¶</a></dt>
+<dd><p>This method collects statistics of the state dict. There are two ways to use this method. First, with <code class="docutils literal notranslate"><span class="pre">display=True</span></code>, it will print the statistics of the state dict. This is useful for <code class="docutils literal notranslate"><span class="pre">print</span></code> or <code class="docutils literal notranslate"><span class="pre">breakpoint()</span></code>. For example:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">state</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+<span class="go">[============================ Stats ResNet_weights ============================]</span>
+<span class="go">name            shape         numel     norm1         norm1_mean  norm2</span>
+<span class="go">0  ResNet_weights  (11689512,)  11689512  235774.53125  0.02017     113.108963</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">lw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">&quot;.*conv.*&quot;</span><span class="p">)</span>
+<span class="go">[=========================== Stats ResNet_weights ===========================]</span>
+<span class="go">    name                   shape              numel    norm1        norm2</span>
+<span class="go">0   conv1.weight              (64, 3, 7, 7)     9408    188.525146   2.438898</span>
+<span class="go">1   layer1.0.conv1.weight    (64, 64, 3, 3)    36864   1736.147461  11.318304</span>
+<span class="go">2   layer1.0.conv2.weight    (64, 64, 3, 3)    36864   1736.389282  11.336217</span>
+<span class="go">3   layer1.1.conv1.weight    (64, 64, 3, 3)    36864   1733.171997  11.316651</span>
+<span class="go">4   layer1.1.conv2.weight    (64, 64, 3, 3)    36864   1724.930786  11.236347</span>
+<span class="go">(...truncated)</span>
+</pre></div>
+</div>
+<p>The second way is to use <code class="docutils literal notranslate"><span class="pre">display=False</span></code>. In this case, it will return a dict of statistics. This is useful for logging to 3rd party tools such as tensorboard and wandb. For example:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">state_logs</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;norm1&#39;</span><span class="p">,</span> <span class="s1">&#39;norm2&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">state_logs</span><span class="p">)</span>
+<span class="go">{&#39;norm1&#39;: 235752.828125, &#39;norm2&#39;: 113.10881805419922}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">wandb</span><span class="o">.</span><span class="n">log</span><span class="p">({</span><span class="s2">&quot;iter&quot;</span><span class="p">:</span> <span class="n">iter_num</span><span class="p">,</span> <span class="o">**</span><span class="n">state_logs</span><span class="p">},</span> <span class="n">step</span><span class="o">=</span><span class="n">iter_num</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">columns_group</span></code> defines the groups of statistics. You can use <code class="docutils literal notranslate"><span class="pre">group</span></code> to select a group of statistics. The default groups are:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;all&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">,</span> <span class="s2">&quot;numel&quot;</span><span class="p">,</span> <span class="s2">&quot;norm1&quot;</span><span class="p">,</span> <span class="s2">&quot;norm1_mean&quot;</span><span class="p">,</span> <span class="s2">&quot;norm2&quot;</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;var&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="s2">&quot;skew&quot;</span><span class="p">,</span> <span class="s2">&quot;kurtosis&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;abs_min&quot;</span><span class="p">,</span> <span class="s2">&quot;abs_max&quot;</span><span class="p">]</span>
+    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">,</span> <span class="s2">&quot;numel&quot;</span><span class="p">,</span> <span class="s2">&quot;norm1&quot;</span><span class="p">,</span> <span class="s2">&quot;norm1_mean&quot;</span><span class="p">,</span> <span class="s2">&quot;norm2&quot;</span><span class="p">]</span>
+    <span class="s2">&quot;_light&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;shape&quot;</span><span class="p">,</span> <span class="s2">&quot;numel&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, return a dict of statistics per layer. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – regex pattern to filter keys. Defaults to None.</p></li>
+<li><p><strong>group</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – group name of statistics. The groups are defined in <code class="docutils literal notranslate"><span class="pre">columns_group</span></code>. Defaults to None. If None and <code class="docutils literal notranslate"><span class="pre">include_keys</span></code> is None, use <code class="docutils literal notranslate"><span class="pre">columns_group[&quot;default&quot;]</span></code>. If None and <code class="docutils literal notranslate"><span class="pre">include_keys</span></code> is not None, no pre-defined group will be used. If the state dict is light (i.e., not a dict of tensors), <code class="docutils literal notranslate"><span class="pre">group</span></code> will be ignored, and <code class="docutils literal notranslate"><span class="pre">columns_group[&quot;_light&quot;]</span></code> will be used. See <a class="reference internal" href="#nnstat.core.StateDict.register_reduction" title="nnstat.core.StateDict.register_reduction"><code class="xref py py-meth docutils literal notranslate"><span class="pre">register_reduction()</span></code></a> for adding custom reduction functions.</p></li>
+<li><p><strong>display</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, print the statistics. Otherwise, return a dict of statistics. Defaults to True.</p></li>
+<li><p><strong>include_keys</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – keys to include. Keys must be in <code class="docutils literal notranslate"><span class="pre">columns_group[&quot;all&quot;]</span></code>. Defaults to None.</p></li>
+<li><p><strong>exlude_keys</strong> (<em>Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>List</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>]</em><em>, </em><em>optional</em>) – keys to exclude. Defaults to None.</p></li>
+<li><p><strong>additional_info</strong> (<a class="reference internal" href="#nnstat.core.StateDict" title="nnstat.core.StateDict"><em>StateDict</em></a><em>, </em><em>optional</em>) – additional information to include. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>Union[None, StateDict]</em> – If <code class="docutils literal notranslate"><span class="pre">display</span></code> is False, return a dict of statistics. Otherwise, return None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.hist">
+<span class="sig-name descname"><span class="pre">hist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L1173-L1217"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.hist" title="Link to this definition">¶</a></dt>
+<dd><p>Plot histogram of the state dict. The file will be saved to cache directory. By default, the cache directory is <code class="docutils literal notranslate"><span class="pre">~/cache_nnstat</span></code>. You can change the cache directory by <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_cache_dir()</span></code>. For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot the histogram</span>
+<span class="n">state</span><span class="o">.</span><span class="n">hist</span><span class="p">()</span>
+<span class="c1"># plot the ecdf for each layer whose name contains &quot;conv&quot;</span>
+<span class="n">state</span><span class="o">.</span><span class="n">ecdf</span><span class="p">(</span><span class="n">lw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">&quot;.*conv.*&quot;</span><span class="p">)</span>
+<span class="c1"># change the cahce directory</span>
+<span class="n">nnstat</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">set_cache_dir</span><span class="p">(</span><span class="s2">&quot;my_cache_dir&quot;</span><span class="p">)</span>
+<span class="c1"># plot the heatmap for each layer whose name contains &quot;conv&quot;</span>
+<span class="n">state</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">lw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s2">&quot;.*conv.*&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True,  histograms per layer will be plotted and multiple files will be saved. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – regex pattern to filter keys. Defaults to None.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – name. Defaults to None.</p></li>
+<li><p><strong>bins</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a><em>, </em><em>optional</em>) – number of bins. Defaults to 100.</p></li>
+<li><p><strong>logx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – log scale of x axis. Defaults to False.</p></li>
+<li><p><strong>logy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – log scale of y axis. Defaults to False.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.ecdf">
+<span class="sig-name descname"><span class="pre">ecdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L1219-L1249"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.ecdf" title="Link to this definition">¶</a></dt>
+<dd><p>Plot Empirical Cumulative Distribution Function (ECDF) of the state dict. The file will be saved to cache directory. By default, the cache directory is <code class="docutils literal notranslate"><span class="pre">~/cache_nnstat</span></code>. You can change the cache directory by <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_cache_dir()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True,  histograms per layer will be plotted and multiple files will be saved. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – regex pattern to filter keys. Defaults to None.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – name. Defaults to None.</p></li>
+<li><p><strong>logx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – log scale of x axis. Defaults to False.</p></li>
+<li><p><strong>logy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – log scale of y axis. Defaults to False.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nnstat.core.StateDict.heatmap">
+<span class="sig-name descname"><span class="pre">heatmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">square</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L1251-L1286"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.StateDict.heatmap" title="Link to this definition">¶</a></dt>
+<dd><p>Plot heatmap of the state dict. The file will be saved to cache directory. By default, the cache directory is <code class="docutils literal notranslate"><span class="pre">~/cache_nnstat</span></code>. You can change the cache directory by <code class="xref py py-meth docutils literal notranslate"><span class="pre">set_cache_dir()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lw</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – If True,  histograms per layer will be plotted and multiple files will be saved. Defaults to False.</p></li>
+<li><p><strong>pattern</strong> (<em>Union</em><em>[</em><em>None</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>]</em><em>, </em><em>optional</em>) – regex pattern to filter keys. Defaults to None.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – name. Defaults to None.</p></li>
+<li><p><strong>vmin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a><em>, </em><em>optional</em>) – min v. Defaults to None.</p></li>
+<li><p><strong>vmax</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a><em>, </em><em>optional</em>) – max v. Defaults to None.</p></li>
+<li><p><strong>log</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – log scale. Defaults to False.</p></li>
+<li><p><strong>square</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a><em>, </em><em>optional</em>) – square shape. Defaults to True.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nnstat.core.load">
+<span class="sig-prename descclassname"><span class="pre">nnstat.core.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/zhengzangw/nnstat/blob/main/nnstat/core.py#L286-L296"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nnstat.core.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load a state dict from a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – path to file</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – name. Defaults to None.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>StateDict</em> – state dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+              </article>
+              
+            </div>
+            <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="functional.html" class="btn btn-neutral float-right" title="nnstat.functional" accesskey="n" rel="next">Next <img src="../_static/images/chevron-right-orange.svg" class="next-page"></a>
+      
+      
+        <a href="../tutorials/getting_started.html" class="btn btn-neutral" title="Getting Started" accesskey="p" rel="prev"><img src="../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
+      
+    </div>
+  
+  
+  <hr>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2023, NNstat Contributors.
+
+    </p>
+  </div>
+    
+      <div>
+        Built with <a href="http://sphinx-doc.org/">Sphinx</a> using <a href="https://github.com/ain-soph/trojanzoo_sphinx_theme">trojanzoo_sphinx_theme</a> (modified from  <a href="https://github.com/ain-soph/pytorch_sphinx_theme">pytorch_sphinx_theme</a>).
+      </div>
+     
+
+</footer>
+
+          </div>
+        </div>
+
+        <div class="sphinx-template-content-right" id="sphinx-template-content-right">
+          <div class="sphinx-template-right-menu" id="sphinx-template-right-menu">
+            <div class="sphinx-template-side-scroll" id="sphinx-template-side-scroll-right">
+              <ul>
+<li><a class="reference internal" href="#">nnstat</a><ul>
+<li><a class="reference internal" href="#nnstat.core.from_state_dict"><code class="docutils literal notranslate"><span class="pre">from_state_dict()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.from_weight"><code class="docutils literal notranslate"><span class="pre">from_weight()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.from_grad"><code class="docutils literal notranslate"><span class="pre">from_grad()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.from_optimizer_state"><code class="docutils literal notranslate"><span class="pre">from_optimizer_state()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.from_together"><code class="docutils literal notranslate"><span class="pre">from_together()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.from_activation"><code class="docutils literal notranslate"><span class="pre">from_activation()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.from_activation_grad"><code class="docutils literal notranslate"><span class="pre">from_activation_grad()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict"><code class="docutils literal notranslate"><span class="pre">StateDict</span></code></a><ul>
+<li><a class="reference internal" href="#nnstat.core.StateDict.__init__"><code class="docutils literal notranslate"><span class="pre">__init__()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.clone"><code class="docutils literal notranslate"><span class="pre">clone()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.to"><code class="docutils literal notranslate"><span class="pre">to()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.set_name"><code class="docutils literal notranslate"><span class="pre">set_name()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.at"><code class="docutils literal notranslate"><span class="pre">at()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.state_dict"><code class="docutils literal notranslate"><span class="pre">state_dict()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.is_compatible"><code class="docutils literal notranslate"><span class="pre">is_compatible()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.flatten"><code class="docutils literal notranslate"><span class="pre">flatten()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.apply"><code class="docutils literal notranslate"><span class="pre">apply()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.apply_"><code class="docutils literal notranslate"><span class="pre">apply_()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.filter"><code class="docutils literal notranslate"><span class="pre">filter()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.sqrt"><code class="docutils literal notranslate"><span class="pre">sqrt()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.sqrt_"><code class="docutils literal notranslate"><span class="pre">sqrt_()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.abs"><code class="docutils literal notranslate"><span class="pre">abs()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.abs_"><code class="docutils literal notranslate"><span class="pre">abs_()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.zeros"><code class="docutils literal notranslate"><span class="pre">zeros()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.zeros_"><code class="docutils literal notranslate"><span class="pre">zeros_()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.ones"><code class="docutils literal notranslate"><span class="pre">ones()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.ones_"><code class="docutils literal notranslate"><span class="pre">ones_()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.sign"><code class="docutils literal notranslate"><span class="pre">sign()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.sign_"><code class="docutils literal notranslate"><span class="pre">sign_()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.clip"><code class="docutils literal notranslate"><span class="pre">clip()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.clip_"><code class="docutils literal notranslate"><span class="pre">clip_()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.apply_reduction"><code class="docutils literal notranslate"><span class="pre">apply_reduction()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.register_reduction"><code class="docutils literal notranslate"><span class="pre">register_reduction()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.max"><code class="docutils literal notranslate"><span class="pre">max()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.min"><code class="docutils literal notranslate"><span class="pre">min()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.no"><code class="docutils literal notranslate"><span class="pre">no()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.name"><code class="docutils literal notranslate"><span class="pre">name()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.numel"><code class="docutils literal notranslate"><span class="pre">numel()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.shape"><code class="docutils literal notranslate"><span class="pre">shape()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.norm"><code class="docutils literal notranslate"><span class="pre">norm()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.norm1"><code class="docutils literal notranslate"><span class="pre">norm1()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.norm2"><code class="docutils literal notranslate"><span class="pre">norm2()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.sum"><code class="docutils literal notranslate"><span class="pre">sum()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.norm1_mean"><code class="docutils literal notranslate"><span class="pre">norm1_mean()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.mean"><code class="docutils literal notranslate"><span class="pre">mean()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.var"><code class="docutils literal notranslate"><span class="pre">var()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.std"><code class="docutils literal notranslate"><span class="pre">std()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.skew"><code class="docutils literal notranslate"><span class="pre">skew()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.kurtosis"><code class="docutils literal notranslate"><span class="pre">kurtosis()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.abs_max"><code class="docutils literal notranslate"><span class="pre">abs_max()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.abs_min"><code class="docutils literal notranslate"><span class="pre">abs_min()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.value"><code class="docutils literal notranslate"><span class="pre">value()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.describe"><code class="docutils literal notranslate"><span class="pre">describe()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.hist"><code class="docutils literal notranslate"><span class="pre">hist()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.ecdf"><code class="docutils literal notranslate"><span class="pre">ecdf()</span></code></a></li>
+<li><a class="reference internal" href="#nnstat.core.StateDict.heatmap"><code class="docutils literal notranslate"><span class="pre">heatmap()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#nnstat.core.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+            </div>
+          </div>
+        </div>
+    </section>
+  </div>
+
+  
+
+  
+
+  
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+  <script src="../_static/doctools.js?v=888ff710"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=f281be69"></script>
+  
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+    jQuery(function () {
+      SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  <script type="text/javascript">
+    jQuery(function () {
+      $('.header-logo').css('background-image', 'url(../_static/logo/nnstat-logo.svg)');
+      $('.docs-header .header-logo').css('background-image', 'url(../_static/logo/nnstat-logo.svg)');
+      $('.footer-logo').css('background-image', 'url(../_static/logo/nnstat-logo.svg)');
+      });
+  </script>
+  <script script type="text/javascript">
+    var collapsedSections = [];
+  </script>
+  
+
+  <!-- Begin Footer -->
+
+  <div class="container-fluid docs-resources" id="docs-resources">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 text-center">
+          <h2>Docs</h2>
+          <p>Access comprehensive developer documentation for NNstat</p>
+          <a class="with-right-arrow" href="../index.html">View Docs</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <footer class="site-footer">
+    <div class="container footer-container">
+      <div class="footer-logo-wrapper">
+        <a href="https://zhengzangw.github.io/nnstat/" class="footer-logo"></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- End Footer -->
+
+  <!-- Begin Mobile Menu -->
+
+  <div class="mobile-main-menu">
+    <div class="container-fluid">
+      <div class="container">
+        <div class="mobile-main-menu-header-container">
+          <a class="header-logo" href="https://zhengzangw.github.io/nnstat/" aria-label="NNstat"></a>
+          <a class="main-menu-close-button" href="#" data-behavior="close-mobile-menu"></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobile-main-menu-links-container">
+      <div class="main-menu">
+        <ul>
+
+          <li>
+            <a href="https://zhengzangw.github.io/nnstat/">Home</a>
+          </li>
+
+          <li class="active resources-mobile-menu-title">
+            <a href="../">Docs</a>
+          </li>
+          <ul class="resources-mobile-menu-items">
+              <li class="active">
+              <a href="https://zhengzangw.github.io/nnstat/">NNstat</a>
+            </li>
+          </ul>
+          
+          <li>
+            <a href="https://github.com/zhengzangw/nnstat/">GitHub</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- End Mobile Menu -->
+
+  <script type="text/javascript" src="../_static/js/vendor/anchor.min.js"></script>
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      mobileMenu.bind();
+      mobileTOC.bind();
+      trojanzooAnchors.bind();
+      sideMenus.bind();
+      scrollToAnchor.bind();
+      highlightNavigation.bind();
+      mainMenuDropdown.bind();
+
+      // Add class to links that have code blocks, since we cannot create links in code blocks
+      $("article.sphinx-template-article a span.pre").each(function (e) {
+        $(this).closest("a").addClass("has-code");
+      });
+    })
+  </script>
+</body>
+
+</html>

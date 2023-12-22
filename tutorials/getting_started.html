@@ -1,0 +1,500 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Getting Started &mdash; NNstat 0.0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+  
+
+  
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+  <link rel="index" title="Index" href="../genindex.html" />
+  <link rel="search" title="Search" href="../search.html" />
+  <link rel="next" title="nnstat" href="../api/nnstat.html" />
+  <link rel="prev" title="Installation" href="installation.html" /> 
+
+  <!-- Preload the theme fonts -->
+
+<link rel="preload" href="../_static/fonts/FreightSans/freight-sans-book.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../_static/fonts/FreightSans/freight-sans-medium.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../_static/fonts/IBMPlexMono/IBMPlexMono-Medium.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../_static/fonts/FreightSans/freight-sans-bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../_static/fonts/FreightSans/freight-sans-medium-italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../_static/fonts/IBMPlexMono/IBMPlexMono-SemiBold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+<!-- Preload the katex fonts -->
+
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Main-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size4-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size3-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Caligraphic-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+    integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
+</head>
+
+
+<div class="container-fluid header-holder docs-header" id="header-holder">
+  <div class="container">
+    <div class="header-container">
+      <a class="header-logo" href="https://zhengzangw.github.io/nnstat/" aria-label="NNstat"></a>
+      <div class="main-menu">
+        <ul>
+          <li>
+            <a href="https://zhengzangw.github.io/nnstat/">Home</a>
+          </li>
+
+          <li class="active docs-active">
+            <div id="resourcesDropdownButton" data-toggle="resources-dropdown" class="resources-dropdown">
+              <a class="resource-option with-down-orange-arrow">
+                Docs
+              </a>
+              <div class="resources-dropdown-menu">
+                  <a class="doc-dropdown-option nav-dropdown-item active" href="https://zhengzangw.github.io/nnstat/">
+                  <span class="dropdown-title">NNstat</span>
+                  <p></p>
+                </a>
+              </div>
+            </div>
+          </li>
+
+          <li>
+            <a href="https://github.com/zhengzangw/nnstat/">GitHub</a>
+          </li>
+        </ul>
+      </div>
+
+      <a class="main-menu-open-button" href="#" data-behavior="open-mobile-menu"></a>
+    </div>
+  </div>
+</div>
+
+<body class="sphinx-template-body">
+
+   
+
+  
+
+  <div class="table-of-contents-link-wrapper">
+    <span>Table of Contents</span>
+    <a href="#" class="toggle-table-of-contents" data-behavior="toggle-table-of-contents"></a>
+  </div>
+
+  <nav data-toggle="sphinx-template-nav-shift" class="sphinx-template-left-menu" id="sphinx-template-left-menu">
+    <div class="sphinx-template-side-scroll">
+      <div class="sphinx-template-menu sphinx-template-menu-vertical" data-spy="affix" role="navigation"
+        aria-label="main navigation">
+        <div class="sphinx-template-left-menu-search">
+          
+
+          
+          
+          
+          <div class="version">
+            0.0.1
+          </div>
+          
+          
+
+          
+
+
+<div role="search">
+  <form id="rtd-search-form" class="sphinx-template-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search Docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        
+        
+        
+        
+        
+        <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/nnstat.html">nnstat</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/functional.html">nnstat.functional</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/accum.html">nnstat.accum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/optim.html">nnstat.optim</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/utils.html">nnstat.utils</a></li>
+</ul>
+
+        
+        
+      </div>
+    </div>
+  </nav>
+
+  <div class="sphinx-template-container">
+    <div class="sphinx-template-page-level-bar" id="sphinx-template-page-level-bar">
+      <div class="sphinx-template-breadcrumbs-wrapper">
+        <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="sphinx-template-breadcrumbs">
+      <li><a href="../index.html" class="fa fa-large fa-home">Docs</a> &gt;</li>
+      <li>Getting Started</li>
+      <li class="sphinx-template-breadcrumbs-aside">
+              <a href="https://github.com/zhengzangw/nnstat/blob/main/docs/source/tutorials/getting_started.rst" class="fa fa-large fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+</div>
+      </div>
+
+      <div class="sphinx-template-shortcuts-wrapper" id="sphinx-template-shortcuts-wrapper">
+        Shortcuts
+      </div>
+    </div>
+
+    <section data-toggle="sphinx-template-nav-shift" id="sphinx-template-content-wrap" class="sphinx-template-content-wrap">
+      <div class="sphinx-template-content-left">
+        
+          <div class="rst-content">
+            
+            <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
+              <article itemprop="articleBody" id="sphinx-template-article" class="sphinx-template-article">
+                
+  <section id="getting-started">
+<span id="tutorials-getting-started"></span><h1>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">NNstat</span></code> is a library for analyzing the status and statistics of neural networks. The basic element for NNstat is <code class="docutils literal notranslate"><span class="pre">StateDict</span></code>. <code class="docutils literal notranslate"><span class="pre">StateDict</span></code> is a <code class="docutils literal notranslate"><span class="pre">dict</span></code>-like object, the keys are the names of the parameters. The values can be <code class="docutils literal notranslate"><span class="pre">torch.Tensor</span></code> including weights, gradients, optimizer states, and activations. The values can also be <code class="docutils literal notranslate"><span class="pre">float</span></code> describing the statistics of the parameters.</p>
+<section id="get-the-params">
+<h2>Get the Params<a class="headerlink" href="#get-the-params" title="Link to this heading">¶</a></h2>
+<p>With <code class="docutils literal notranslate"><span class="pre">NNstat</span></code>, it is easy to get the information of a neural network. For example, we can get the weights of a randomly initialized ResNet18 model via <code class="xref py py-meth docutils literal notranslate"><span class="pre">from_weight()</span></code>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">nnstat</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchvision</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state_dict</span> <span class="o">=</span> <span class="n">nnstat</span><span class="o">.</span><span class="n">from_state_dict</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">resnet18</span><span class="p">()</span><span class="o">.</span><span class="n">state_dict</span><span class="p">())</span>
+<span class="go"># or in a recommended way</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state_dict</span> <span class="o">=</span> <span class="n">nnstat</span><span class="o">.</span><span class="n">from_weight</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">resnet18</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">state_dict</span><span class="p">)</span>
+<span class="go">ResNet_weights[L2=113.1, Numel=11,689,512, device=cpu, dtype=None]</span>
+<span class="go">(</span>
+<span class="go">        00: conv1.weight                    (64, 3, 7, 7)</span>
+<span class="go">        01: bn1.weight                              (64,)</span>
+<span class="go">        02: bn1.bias                                (64,)</span>
+<span class="go">        03: layer1.0.conv1.weight          (64, 64, 3, 3)</span>
+<span class="go">        04: layer1.0.bn1.weight                     (64,)</span>
+<span class="go">        05: layer1.0.bn1.bias                       (64,)</span>
+<span class="go">        (...truncated)</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+<p>To get detailed statistics for each parameter, we can use <a class="reference internal" href="../api/nnstat.html#nnstat.core.StateDict.describe" title="nnstat.core.StateDict.describe"><code class="xref py py-meth docutils literal notranslate"><span class="pre">describe</span></code></a> method.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">state_dict</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span> <span class="c1"># This prints the statistics of all parameters in the state_dict.</span>
+<span class="go">[============================= Stats ResNet_weights ==============================]</span>
+<span class="go">   no name            shape         numel     norm1          norm1_mean  norm2</span>
+<span class="go">0  62  ResNet_weights  (11689512,)  11689512  235797.859375  0.020172    113.1194</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">state_dict</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">lw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s1">&#39;.*conv.*&#39;</span><span class="p">)</span> <span class="c1"># This prints the statistics of all conv layers layerwisely.</span>
+<span class="go">[=================================== Stats ResNet_weights ====================================]</span>
+<span class="go">    no name                   shape              numel    norm1         norm1_mean  norm2</span>
+<span class="go">0    0  conv1.weight              (64, 3, 7, 7)     9408    188.483765  0.020034     2.434446</span>
+<span class="go">1    3  layer1.0.conv1.weight    (64, 64, 3, 3)    36864   1720.965454  0.046684    11.248564</span>
+<span class="go">2    6  layer1.0.conv2.weight    (64, 64, 3, 3)    36864   1737.153442  0.047123    11.347944</span>
+<span class="go">3    9  layer1.1.conv1.weight    (64, 64, 3, 3)    36864   1725.072632  0.046796    11.237497</span>
+<span class="go">(...truncated)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">lw</span></code> argument means layerwise statistics. The <code class="docutils literal notranslate"><span class="pre">pattern</span></code> argument is a regular expression to filter the parameters. We can customize the statistics as follows.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">state_dict</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">lw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s1">&#39;.*conv.*&#39;</span><span class="p">,</span> <span class="n">include_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;shape&#39;</span><span class="p">,</span> <span class="s1">&#39;numel&#39;</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;std&#39;</span><span class="p">,</span> <span class="s1">&#39;norm2&#39;</span><span class="p">])</span>
+<span class="go">[============================== Stats ResNet_weights ===============================]</span>
+<span class="go">   name                   shape              numel    mean      std       norm2</span>
+<span class="go">0   conv1.weight              (64, 3, 7, 7)     9408 -0.000200  0.025099   2.434446</span>
+<span class="go">1   layer1.0.conv1.weight    (64, 64, 3, 3)    36864  0.000027  0.058587  11.248564</span>
+<span class="go">2   layer1.0.conv2.weight    (64, 64, 3, 3)    36864  0.000487  0.059103  11.347944</span>
+<span class="go">(...truncated)</span>
+</pre></div>
+</div>
+<p>Let’s do a quick check. For <code class="docutils literal notranslate"><span class="pre">conv1.weight</span></code>, the mean is close to zero, and the standard deviation is determined by <a class="reference external" href="https://openaccess.thecvf.com/content_iccv_2015/html/He_Delving_Deep_into_ICCV_2015_paper.html">Kaiming initialization</a>. With a fanout of <span class="math notranslate nohighlight">\(o=64\times 7\times 7=3136\)</span>, the std is <span class="math notranslate nohighlight">\(\sigma=\sqrt{2/o}=0.0253\approx 0.0251\)</span>. Then the L2 norm is <span class="math notranslate nohighlight">\(||w||_2=\sqrt{N*\sigma^2}=\sqrt{N}\sigma=2.436\approx 2.434\)</span>.</p>
+</section>
+<section id="get-the-update">
+<h2>Get the Update<a class="headerlink" href="#get-the-update" title="Link to this heading">¶</a></h2>
+<p>Now let’s turn to another example. We want to get the update of a GPT-2 model. We train a GPT-2-small with <a class="reference external" href="https://github.com/Liuhong99/Sophia">nanoGPT-Sophia</a> and use the checkpoint at the 50000 step. The first way to compute the update is calculating the difference between the current state and the previous state.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="n">weight_0</span> <span class="o">=</span> <span class="n">nnstat</span><span class="o">.</span><span class="n">from_weight</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">clone</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span class="c1"># train loops start here</span>
+    <span class="c1"># model forward</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+<span class="hll">    <span class="n">update</span> <span class="o">=</span> <span class="n">nnstat</span><span class="o">.</span><span class="n">from_weight</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">-</span> <span class="n">weight_0</span>
+</span><span class="hll">    <span class="n">weight_0</span> <span class="o">=</span> <span class="n">nnstat</span><span class="o">.</span><span class="n">from_weight</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">clone</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<p>Note that without <code class="docutils literal notranslate"><span class="pre">clone=True</span></code>, <code class="docutils literal notranslate"><span class="pre">weight_0</span></code> will be updated with the model. Thus, an equivalent way is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="hll"><span class="n">weight</span> <span class="o">=</span> <span class="n">nnstat</span><span class="o">.</span><span class="n">from_weight</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+</span><span class="hll"><span class="n">weight_0</span> <span class="o">=</span> <span class="n">weight</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+</span><span class="c1"># train loops start here</span>
+    <span class="c1"># model forward</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+<span class="hll">    <span class="n">update</span> <span class="o">=</span> <span class="n">weight</span> <span class="o">-</span> <span class="n">weight_0</span>
+</span><span class="hll">    <span class="n">weight_0</span> <span class="o">=</span> <span class="n">weight</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+</span></pre></div>
+</div>
+<div class="admonition caution">
+<p class="admonition-title">Caution</p>
+<p>For weights (<a class="reference internal" href="../api/nnstat.html#nnstat.core.from_weight" title="nnstat.core.from_weight"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_weight</span></code></a>) and optimizer states (<a class="reference internal" href="../api/nnstat.html#nnstat.core.from_optimizer_state" title="nnstat.core.from_optimizer_state"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_optimizer_state</span></code></a>), <code class="docutils literal notranslate"><span class="pre">clone=False</span></code> keeps track of the changes. For gradients (<a class="reference internal" href="../api/nnstat.html#nnstat.core.from_grad" title="nnstat.core.from_grad"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_grad</span></code></a>) and activations (<a class="reference internal" href="../api/nnstat.html#nnstat.core.from_activation" title="nnstat.core.from_activation"><code class="xref py py-meth docutils literal notranslate"><span class="pre">from_activation</span></code></a>), <code class="docutils literal notranslate"><span class="pre">clone=False</span></code> will not keep track of the changes because the gradients and activations will be cleared after each iteration.</p>
+</div>
+<p>Since the optimizer is <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.optim.AdamW.html#torch.optim.AdamW" title="(in PyTorch v2.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">AdamW</span></code></a> , the second way to compute the update is directly recompute the update with AdamW optimizer states.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># train loops start here</span>
+    <span class="c1"># model forward</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+<span class="hll">    <span class="n">weight</span><span class="p">,</span> <span class="n">grad</span><span class="p">,</span> <span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">=</span> <span class="n">nnstat</span><span class="o">.</span><span class="n">from_together</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;exp_avg&quot;</span><span class="p">,</span> <span class="s2">&quot;exp_avg_sq&quot;</span><span class="p">])</span>
+</span><span class="hll">    <span class="n">update_adam</span> <span class="o">=</span> <span class="o">-</span><span class="n">lr</span> <span class="o">*</span> <span class="n">m</span> <span class="o">/</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1e-8</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<p>This repo uses AdamW with epsilon 1e-8, and we ignore the bias correction and weight decay here. Now let’s examine the embedding layer of adam update.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">weight</span>
+<span class="go">DistributedDataParallel_weights[L2=639, Numel=124,373,760, device=cuda:0, dtype=None]</span>
+<span class="go">(</span>
+<span class="go">        00: module.transformer.wte.weight              (50304, 768)</span>
+<span class="go">        01: module.transformer.wpe.weight               (1024, 768)</span>
+<span class="go">        02: module.transformer.h.0.ln_1.weight               (768,)</span>
+<span class="go">        (...truncated)</span>
+<span class="go">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">update</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">update_adam</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">update</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">update_adam</span><span class="o">.</span><span class="n">at</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>Since we are using fp32, the difference is acceptable (fp32 has 23 bits of mantissa, and thus the precision is about <span class="math notranslate nohighlight">\(2^{-23}\approx 1\times 10^{-7}\)</span>).</p>
+</section>
+<section id="compute-the-trust-ratio">
+<h2>Compute the Trust Ratio<a class="headerlink" href="#compute-the-trust-ratio" title="Link to this heading">¶</a></h2>
+<p>Trust ratio measures the ratio of the weight norm to the update norm, defined in <a class="reference external" href="https://arxiv.org/abs/1708.03888">Large Batch Training of Convolutional Networks</a>. We can use this metric to check if the updates among different layers are balanced. Here we define the trust ratio as the reciprocal of the trust ratio defined in the original paper since this definition is more intuitive.</p>
+<p>The trust ratio can be computed in one line. There is also a function <a class="reference internal" href="../api/functional.html#nnstat.functional.trust_ratio" title="nnstat.functional.trust_ratio"><code class="xref py py-func docutils literal notranslate"><span class="pre">trust_ratio</span></code></a> to compute the trust ratio.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">trust_ratio</span> <span class="o">=</span> <span class="n">update</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">/</span> <span class="n">weight</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trust_ratio_mlp</span> <span class="o">=</span> <span class="n">nnstat</span><span class="o">.</span><span class="n">trust_ratio</span><span class="p">(</span><span class="n">update</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="s1">&#39;.*mlp.*&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trust_ratio_mlp</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">lw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">[===================== Stats StateDict =====================]</span>
+<span class="go">    no name                                        value</span>
+<span class="go">0    0  module.transformer.h.0.mlp.c_fc.weight     0.001064</span>
+<span class="go">1    1  module.transformer.h.0.mlp.c_proj.weight   0.001172</span>
+<span class="go">2    2  module.transformer.h.1.mlp.c_fc.weight     0.001089</span>
+<span class="go">3    3  module.transformer.h.1.mlp.c_proj.weight   0.000974</span>
+<span class="go">4    4  module.transformer.h.2.mlp.c_fc.weight     0.001014</span>
+<span class="go">5    5  module.transformer.h.2.mlp.c_proj.weight   0.001087</span>
+<span class="go">6    6  module.transformer.h.3.mlp.c_fc.weight     0.001020</span>
+<span class="go">7    7  module.transformer.h.3.mlp.c_proj.weight   0.001065</span>
+<span class="go">8    8  module.transformer.h.4.mlp.c_fc.weight     0.001040</span>
+<span class="go">9    9  module.transformer.h.4.mlp.c_proj.weight   0.001049</span>
+<span class="go">10  10  module.transformer.h.5.mlp.c_fc.weight     0.001067</span>
+<span class="go">11  11  module.transformer.h.5.mlp.c_proj.weight   0.001017</span>
+<span class="go">(...truncated)</span>
+</pre></div>
+</div>
+<p>As we can see, the trust ratios of the MLP layers are close to each other.</p>
+</section>
+</section>
+
+
+              </article>
+              
+            </div>
+            <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../api/nnstat.html" class="btn btn-neutral float-right" title="nnstat" accesskey="n" rel="next">Next <img src="../_static/images/chevron-right-orange.svg" class="next-page"></a>
+      
+      
+        <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><img src="../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
+      
+    </div>
+  
+  
+  <hr>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2023, NNstat Contributors.
+
+    </p>
+  </div>
+    
+      <div>
+        Built with <a href="http://sphinx-doc.org/">Sphinx</a> using <a href="https://github.com/ain-soph/trojanzoo_sphinx_theme">trojanzoo_sphinx_theme</a> (modified from  <a href="https://github.com/ain-soph/pytorch_sphinx_theme">pytorch_sphinx_theme</a>).
+      </div>
+     
+
+</footer>
+
+          </div>
+        </div>
+
+        <div class="sphinx-template-content-right" id="sphinx-template-content-right">
+          <div class="sphinx-template-right-menu" id="sphinx-template-right-menu">
+            <div class="sphinx-template-side-scroll" id="sphinx-template-side-scroll-right">
+              <ul>
+<li><a class="reference internal" href="#">Getting Started</a><ul>
+<li><a class="reference internal" href="#get-the-params">Get the Params</a></li>
+<li><a class="reference internal" href="#get-the-update">Get the Update</a></li>
+<li><a class="reference internal" href="#compute-the-trust-ratio">Compute the Trust Ratio</a></li>
+</ul>
+</li>
+</ul>
+
+            </div>
+          </div>
+        </div>
+    </section>
+  </div>
+
+  
+
+  
+
+  
+  <script src="../_static/jquery.js?v=5d32c60e"></script>
+  <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+  <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+  <script src="../_static/doctools.js?v=888ff710"></script>
+  <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+  <script src="../_static/copybutton.js?v=f281be69"></script>
+  <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+    jQuery(function () {
+      SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  <script type="text/javascript">
+    jQuery(function () {
+      $('.header-logo').css('background-image', 'url(../_static/logo/nnstat-logo.svg)');
+      $('.docs-header .header-logo').css('background-image', 'url(../_static/logo/nnstat-logo.svg)');
+      $('.footer-logo').css('background-image', 'url(../_static/logo/nnstat-logo.svg)');
+      });
+  </script>
+  <script script type="text/javascript">
+    var collapsedSections = [];
+  </script>
+  
+
+  <!-- Begin Footer -->
+
+  <div class="container-fluid docs-resources" id="docs-resources">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 text-center">
+          <h2>Docs</h2>
+          <p>Access comprehensive developer documentation for NNstat</p>
+          <a class="with-right-arrow" href="../index.html">View Docs</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <footer class="site-footer">
+    <div class="container footer-container">
+      <div class="footer-logo-wrapper">
+        <a href="https://zhengzangw.github.io/nnstat/" class="footer-logo"></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- End Footer -->
+
+  <!-- Begin Mobile Menu -->
+
+  <div class="mobile-main-menu">
+    <div class="container-fluid">
+      <div class="container">
+        <div class="mobile-main-menu-header-container">
+          <a class="header-logo" href="https://zhengzangw.github.io/nnstat/" aria-label="NNstat"></a>
+          <a class="main-menu-close-button" href="#" data-behavior="close-mobile-menu"></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobile-main-menu-links-container">
+      <div class="main-menu">
+        <ul>
+
+          <li>
+            <a href="https://zhengzangw.github.io/nnstat/">Home</a>
+          </li>
+
+          <li class="active resources-mobile-menu-title">
+            <a href="../">Docs</a>
+          </li>
+          <ul class="resources-mobile-menu-items">
+              <li class="active">
+              <a href="https://zhengzangw.github.io/nnstat/">NNstat</a>
+            </li>
+          </ul>
+          
+          <li>
+            <a href="https://github.com/zhengzangw/nnstat/">GitHub</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- End Mobile Menu -->
+
+  <script type="text/javascript" src="../_static/js/vendor/anchor.min.js"></script>
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      mobileMenu.bind();
+      mobileTOC.bind();
+      trojanzooAnchors.bind();
+      sideMenus.bind();
+      scrollToAnchor.bind();
+      highlightNavigation.bind();
+      mainMenuDropdown.bind();
+
+      // Add class to links that have code blocks, since we cannot create links in code blocks
+      $("article.sphinx-template-article a span.pre").each(function (e) {
+        $(this).closest("a").addClass("has-code");
+      });
+    })
+  </script>
+</body>
+
+</html>
